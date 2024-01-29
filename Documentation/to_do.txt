@@ -1,7 +1,3 @@
-1. Project Setup:
-   -  Install Django (`pip install django`).
-   -  Create a new Django project (`django-admin startproject yourprojectname`).
-   -  Navigate to the project directory (`cd yourprojectname`).
 
 2. User Accounts and Management - Following and Followers:
    - User Authentication:
@@ -22,3 +18,10 @@
    -  Implement a view for users to respond to missing person posts.
    -  Allow anyone, including followers and non-followers, to submit responses.
    -  Design templates for displaying responses to missing person posts.
+
+
+Done ✅
+1. Project Setup:
+   -  Install Django (`pip install django`).
+   -  Create a new Django project (`django-admin startproject yourprojectname`).
+   -  Navigate to the project directory (`cd yourprojectname`).
