@@ -7,7 +7,7 @@ from django.core.mail import send_mail # to send the mail after successful email
 
 # Create your views here.
 # User creation
-def UserCreationView(request):
+def user_creation_view(request):
     """Creates the user account"""
     if request.method == 'POST':
         form = CustomerUserCreationForm(request.POST) # initialize the form
@@ -30,7 +30,7 @@ def UserCreationView(request):
     return render(request, 'accounts/register.html', context)
 
 # Authentication/login view
-def AuthenticationView(request):
+def authentication_view(request):
     """Login/Authenticate the user"""
     if request.method == 'POST':
         form = CustomUserAuthenticationForm(data=request.POST)
@@ -51,4 +51,7 @@ def AuthenticationView(request):
     }
     return render(request, 'accounts/login.html', context)
 
+# logout view
+def logout(request):
+    """Logout user"""
 
