@@ -38,7 +38,8 @@ def authentication_view(request):
             user = form.get_user() # how to pick the user details
             login(request, user)
             messages.success(request, 'Welcome!')
-            return HttpResponse('Login successful')
+            return redirect('accounts:home')
+            # return HttpResponse('Login successful')
         else:
             messages.error(request, 'Login unsuccesful, please try again')
         
@@ -54,4 +55,14 @@ def authentication_view(request):
 # logout view
 def logout(request):
     """Logout user"""
+    user = request.user
+    logout(request, user)
+    # success message
+    return HttpResponse('Succesfull logout')
+    # the template
 
+# the home page
+def home(request):
+    """The landing page"""
+    context = {}
+    return render(request, 'common/index.html', context)
