@@ -39,7 +39,6 @@ def authentication_view(request):
             login(request, user)
             messages.success(request, 'Welcome!')
             return redirect('accounts:home')
-            # return HttpResponse('Login successful')
         else:
             messages.error(request, 'Login unsuccesful, please try again')
         
