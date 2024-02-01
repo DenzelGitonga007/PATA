@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .forms import CustomerUserCreationForm # custom user creation forms
+from django.contrib.auth import login, authenticate
+from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm # custom user creation forms
 from .models import CustomUser
 from django.contrib import messages
 from django.core.mail import send_mail # to send the mail after successful email creation
@@ -27,5 +28,27 @@ def UserCreationView(request):
         'form': form
     }
     return render(request, 'accounts/register.html', context)
+
+# Authentication/login view
+def AuthenticationView(request):
+    """Login/Authenticate the user"""
+    if request.method == 'POST':
+        form = CustomUserAuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user() # how to pick the user details
+            login(request, user)
+            messages.success(request, 'Welcome!')
+            return HttpResponse('Login successful')
+        else:
+            messages.error(request, 'Login unsuccesful, please try again')
+        
+    else:
+        form = CustomUserAuthenticationForm()
+    
+    # The template
+    context = {
+        'form': form
+    }
+    return render(request, 'accounts/login.html', context)
 
 
