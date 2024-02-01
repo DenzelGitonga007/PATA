@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout
 from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm # custom user creation forms
 from .models import CustomUser
 from django.contrib import messages
@@ -53,10 +53,9 @@ def authentication_view(request):
     return render(request, 'accounts/login.html', context)
 
 # logout view
-def logout(request):
+def logout_user(request):
     """Logout user"""
-    user = request.user
-    logout(request, user)
+    logout(request)
     # success message
     return HttpResponse('Succesfull logout')
     # the template
