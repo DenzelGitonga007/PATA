@@ -1,8 +1,5 @@
 
-2. User Accounts and Management - Following and Followers:
-   - User Authentication:
-     -  Implement user registration, login, and logout.
-     -  Customize the user model if needed.
+2. Following and Followers:
    - Following and Followers:
      -  Create a `UserProfile` model in the `accounts` app.
      -  Implement a view for users to follow/unfollow each other.
@@ -25,3 +22,8 @@ Done ✅
    -  Install Django (`pip install django`).
    -  Create a new Django project (`django-admin startproject yourprojectname`).
    -  Navigate to the project directory (`cd yourprojectname`).
+
+2. User Accounts and Management - Following and Followers:
+   - User Authentication:
+     -  Implement user registration, login, and logout.
+     -  Customize the user model if needed.
