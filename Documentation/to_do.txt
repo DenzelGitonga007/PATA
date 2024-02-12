@@ -1,3 +1,4 @@
+* email upon successful login
 
 2. Following and Followers:
    - Following and Followers:

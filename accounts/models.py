@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     ]
     user_type = models.CharField(max_length=12, choices=user_type_choices, default='normal_user')
     
-    # Get username and/or shortname
+    # Get username and/or fullname
 
     def __str__(self):
-        return "{}".format(self.username)
+        return "{}".format(self.username or self.get_full_name())
