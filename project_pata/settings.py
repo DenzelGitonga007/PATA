@@ -125,3 +125,14 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.CustomUser' # the customized user
+
+
+# For the emails
+if DEBUG: 
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.Backend'
+EMAIL_HOST = 'smpt.google.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'gitongadenzel@gmail.com'
+EMAIL_HOST_PASSWORD = 'tvptsrhcvyednoqg'
