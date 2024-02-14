@@ -14,6 +14,7 @@ def user_creation_view(request):
         form = CustomerUserCreationForm(request.POST) # initialize the form
         if form.is_valid():
             form.save()
+            user_email = form.cleaned_data.get('email') # get the user's email
             # Successful creation
             # send the email
             try:
@@ -21,7 +22,7 @@ def user_creation_view(request):
                     "Welcome to PATA", # subject
                     "Lost a loved one? We would do our best in helping you find them. Upload their details, and you will be notified just as soon as anyone identifies them", # message
                     settings.EMAIL_HOST_USER, # from who?
-                    [form.instance.email], # the email of the user
+                    [user_email], # the email of the user
                 )
                 email_message.send() # send the email
             except Exception as e:
@@ -40,6 +41,7 @@ def user_creation_view(request):
         'form': form
     }
     return render(request, 'accounts/register.html', context)
+
 
 # Authentication/login view
 def authentication_view(request):
