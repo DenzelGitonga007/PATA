@@ -128,10 +128,11 @@ AUTH_USER_MODEL = 'accounts.CustomUser' # the customized user
 
 
 # For the emails
-if DEBUG: 
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.Backend'
+# if DEBUG: 
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# else:
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smpt.google.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'gitongadenzel@gmail.com'
