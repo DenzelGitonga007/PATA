@@ -29,8 +29,8 @@ def user_creation_view(request):
                 raise Exception("Email sending failed {}".format(str(e)))
             
             messages.success(request, 'Account created successful. You can now log in with your details')
-            # return redirect('accounts:login') # take back to login page
-            return HttpResponse('Registration successful')
+            return redirect('accounts:login') # take back to login page
+            # return HttpResponse('Registration successful')
         else:
             messages.error(request, 'Oops! Something went wrong. Try again later')
     else:
