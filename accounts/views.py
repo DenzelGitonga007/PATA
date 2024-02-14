@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import login, logout
 from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm # custom user creation forms
 from .models import CustomUser
-from django.contrib import messages
-from django.core.mail import send_mail # to send the mail after successful email creation
+from django.contrib import messages 
+from django.core.mail import EmailMessage # send_mail # to send the mail after successful email creation
+from django.conf import settings
 
 # Create your views here.
 # User creation
@@ -15,9 +16,20 @@ def user_creation_view(request):
             form.save()
             # Successful creation
             # send the email
+            try:
+                email_message = EmailMessage(
+                    "Welcome to PATA", # subject
+                    "Lost a loved one? We would do our best in helping you find them. Upload their details, and you will be notified just as soon as anyone identifies them", # message
+                    settings.EMAIL_HOST_USER, # from who?
+                    [form.instance.email], # the email of the user
+                )
+                email_message.send() # send the email
+            except Exception as e:
+                raise Exception("Email sending failed {}".format(str(e)))
+            
             messages.success(request, 'Account created successful. You can now log in with your details')
             # return redirect('accounts:login') # take back to login page
-            return HttpResponse('Registration successfull')
+            return HttpResponse('Registration successful')
         else:
             messages.error(request, 'Oops! Something went wrong. Try again later')
     else:
