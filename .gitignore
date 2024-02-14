@@ -1,4 +1,5 @@
 env_pata/
 *.pyc
 db.sqlite3
+missing_persons_photos
 

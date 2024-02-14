@@ -20,7 +20,7 @@ class MissingPerson(models.Model): # the missing persons details
         upload_to=upload_to, # upload path
         validators=[
             FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
-            MaxValueValidator(limit_value=8, message='File size must be no more than 8 MB.')
+            
             ]
         )
     location = models.CharField(max_length=255)
