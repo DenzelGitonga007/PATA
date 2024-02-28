@@ -6,4 +6,4 @@ class MissingPersonForm(forms.ModelForm):
     """Form to fill the missing person details"""
     class Meta:
         model = MissingPerson
-        exclude = ['created_at']
+        exclude = ['user','created_at']
