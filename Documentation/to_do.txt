@@ -3,6 +3,7 @@ Doing: ⚒️
    -  Create a `MissingPerson` model in the `posts` app. ✅
    -  Create forms for submitting missing persons' information. ✅
    -  Implement views for posting missing persons' details. ✅
+   -  Email upon posting.
    -  Design templates for displaying and viewing missing persons' details.
 
 
