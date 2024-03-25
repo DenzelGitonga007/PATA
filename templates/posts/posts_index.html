@@ -13,10 +13,7 @@
             <p>{{ post.description }}</p>
             <p>Location: {{ post.location }}</p>
             <p>Date Missing: {{ post.date_missing }}</p>
-            <!-- Add more details as needed -->
-            {% if post.user == request.user %}
-                <p>Your post</p>
-            {% endif %}
+            <!-- More details -->
         </div>
     {% endfor %}
 </body>
