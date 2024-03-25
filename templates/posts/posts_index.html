@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>All Missing Person Posts</h1>
+    <button><a href="{% url 'posts:create_missing_person' %}">Post</a></button>
     {% for post in posts %}
         <div>
             <h2>{{ post.name }}</h2>
