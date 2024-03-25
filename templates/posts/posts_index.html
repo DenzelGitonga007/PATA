@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Posts</title>
+</head>
+<body>
+    <h1>All Missing Person Posts</h1>
+    {% for post in posts %}
+        <div>
+            <h2>{{ post.name }}</h2>
+            <p>{{ post.description }}</p>
+            <p>Location: {{ post.location }}</p>
+            <p>Date Missing: {{ post.date_missing }}</p>
+            <!-- Add more details as needed -->
+            {% if post.user == request.user %}
+                <p>Your post</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>

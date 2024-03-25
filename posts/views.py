@@ -18,7 +18,8 @@ def create_missing_person(request):
             missing_person.user = request.user
             
             missing_person.save()
-            return HttpResponse('upload missing person success')
+            messages.success('Your post is now live! We hope you find the person soon')
+            redirect('posts:index')
         else:
             messages.error(request, "Oops! Failed to upload missing person's details")
 
@@ -27,3 +28,17 @@ def create_missing_person(request):
     
     context = {'form': form}
     return render(request, 'posts/create_missing_person.html', context)
+
+
+# User can view the list of posts after posting
+@login_required(login_url='accounts:login')
+def posts_index(request):
+    """
+    Fetch or display all posts
+
+    """
+    posts = MissingPerson.objects.all().order_by('-created_at')
+    context = {
+        'posts': posts
+        }
+    return render(request, 'posts/posts_index.html', context)
