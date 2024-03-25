@@ -7,3 +7,6 @@ class MissingPersonForm(forms.ModelForm):
     class Meta:
         model = MissingPerson
         exclude = ['user','created_at']
+        widgets = {
+            'date_missing': forms.DateInput(attrs={'time': 'date'}),
+        }
