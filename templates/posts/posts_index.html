@@ -16,8 +16,8 @@
             <p>Date Missing: {{ post.date_missing }}</p>
             <!-- Display image -->
             <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo">
-            <!-- More details -->
         </div>
+        <button><a href="{% url 'posts:view_post_details' post.id %}">View More Details</a></button>
     {% endfor %}
 </body>
 

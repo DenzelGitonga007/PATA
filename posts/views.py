@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import MissingPerson
 from .forms import MissingPersonForm
 from django.contrib import messages
@@ -6,8 +6,19 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.conf import settings
 
+"""
+CRUD FOR THE POSTS:
+
+Create - Create/post missing person's details
+Read 1 - Read/view details of the missing person, both for the user who posted, and everyone else in the world
+Read 2 - Read/view details of the missing person, both for the user who posted, and everyone else in the world: only viewing
+Update - User who posted, is able to update the details of the missing person
+Delete - User who posted is able to delete the missing person
+
+"""
 
 
+# Create
 @login_required(login_url='accounts:login')
 def create_missing_person(request):
     """Upload missing person's details"""
@@ -42,8 +53,7 @@ def create_missing_person(request):
     return render(request, 'posts/create_missing_person.html', context)
 
 
-
-
+# Read 1
 @login_required(login_url='accounts:login')
 def posts_index(request):
     """
@@ -59,3 +69,16 @@ def posts_index(request):
             posts = [user_post] + list(other_posts)
     context = {'posts': posts}
     return render(request, 'posts/posts_index.html', context)
+
+# Read 2 -- viewing the details: only viewing
+@login_required(login_url='accounts:login')
+def view_post_details(request, post_id):
+    """
+    View the particular post details
+
+    """
+    post = get_object_or_404(MissingPerson, pk=post_id)
+    context = {
+        'post': post,
+    }
+    return render(request, 'posts/view_post_details.html', context)
