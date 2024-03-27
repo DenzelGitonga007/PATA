@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Missing Person</title>
+</head>
+<body>
+    <h3>Create Missing Person</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Post</button>
+        <button><a href="{% url 'accounts:home' %}">Back</a></button>
+    </form>
+</body>
+</html>
