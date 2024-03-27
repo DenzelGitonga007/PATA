@@ -3,6 +3,8 @@ from .models import MissingPerson
 from .forms import MissingPersonForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 
 
@@ -15,8 +17,23 @@ def create_missing_person(request):
             missing_person = form.save(commit=False)
             missing_person.user = request.user
             missing_person.save()
+            user_email = request.user.email # get the email of the logged in user who posted
+            # Send email upon successful posting
+            try:
+                email_message = EmailMessage(
+                    "Post submitted successfully", #subject
+                    "The missing person's details are now live. We hope you find them soon", # message
+                    settings.EMAIL_HOST_USER, # sender's email
+                    [user_email], # recepient email
+                )
+                email_message.send()
+            except Exception as e:
+                raise Exception("Email sending failed {}".format(str(e)))
+            # End of email send
+
+
             messages.success(request, 'Your post is now live! We hope you find the person soon')
-            return redirect('posts:posts_index')  # Add return statement here
+            return redirect('posts:posts_index')
         else:
             messages.error(request, "Oops! Failed to upload missing person's details")
     else:
