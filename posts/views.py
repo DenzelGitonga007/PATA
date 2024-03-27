@@ -82,3 +82,30 @@ def view_post_details(request, post_id):
         'post': post,
     }
     return render(request, 'posts/view_post_details.html', context)
+
+
+# Update
+@login_required(login_url='accounts:login')
+def update_post(request, post_id):
+    """
+    Update the details of the post
+
+    """
+    post = get_object_or_404(MissingPerson, pk=post_id)
+    # Check if the current user is the owner of the post
+    if post.user != request.user:
+        messages.error(request, "You don't have permission to update this post.")
+        return redirect('posts:posts_index')
+    
+    if request.method == 'POST':
+        form = MissingPersonForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your post has been updated successfully!')
+            return redirect('posts:posts_index')
+        else:
+            messages.error(request, 'Failed to update the post')
+    else:
+        form = MissingPersonForm(instance=post)
+    context = {'form': form}
+    return render(request, 'posts/update_post.html', context)
