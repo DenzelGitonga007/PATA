@@ -14,7 +14,7 @@
     <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo">
     <!-- Show the edit button if the user is the one who posted -->
     {% if post.user == request.user %}
-        <button><a href="{% url 'posts:update_post' post.id %}">Edit Post</a></button>
+        <button><a href="{% url 'posts:update_post' post.pk %}">Edit Post</a></button>
     {% endif %}
 </body>
 </html>
