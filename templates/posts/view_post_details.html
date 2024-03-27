@@ -15,6 +15,23 @@
     <!-- Show the edit button if the user is the one who posted -->
     {% if post.user == request.user %}
         <button><a href="{% url 'posts:update_post' post.pk %}">Edit Post</a></button>
+        <form action="{% url 'posts:delete_post' post.pk %}" method="post" onsubmit="return confirmDelete()">
+            {%  csrf_token %}
+            <button type="submit">Delete Post</button>
+        </form>
     {% endif %}
+
+
+    <!-- JS for deleting -->
+    <script>
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delte this post?")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+
 </body>
 </html>

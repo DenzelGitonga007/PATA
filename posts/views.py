@@ -109,3 +109,22 @@ def update_post(request, post_id):
         form = MissingPersonForm(instance=post)
     context = {'form': form}
     return render(request, 'posts/update_post.html', context)
+
+
+# Delete
+@login_required(login_url='accounts:login')
+def delete_post(request, post_id):
+    """
+    Delete the post
+
+    """
+    post = get_object_or_404(MissingPerson, pk=post_id)
+    # Check if the user deleting is the one who posted
+    if post.user != request.user:
+        messages.error(request, "You don't have permission to delete this post")
+        return redirect('posts:posts_index')
+    
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, 'Your post has been deleted successfully!')
+        return redirect('posts:posts_index')
