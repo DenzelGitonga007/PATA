@@ -1,19 +1,22 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm # custom user creation forms
 from .models import CustomUser
 from django.contrib import messages 
 from django.core.mail import EmailMessage # send_mail # to send the mail after successful email creation
 from django.conf import settings
+from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm
+from .models import CustomUser, UserProfile
 
-# Create your views here.
 # User creation
 def user_creation_view(request):
     """Creates the user account"""
     if request.method == 'POST':
         form = CustomerUserCreationForm(request.POST) # initialize the form
         if form.is_valid():
-            form.save()
+            user = form.save()
+            UserProfile.objects.create(user=user)  # Create UserProfile for the new user
             user_email = form.cleaned_data.get('email') # get the user's email
             # Successful creation
             # send the email
@@ -65,6 +68,7 @@ def authentication_view(request):
     }
     return render(request, 'accounts/login.html', context)
 
+
 # logout view
 def logout_user(request):
     """Logout user"""
@@ -78,3 +82,20 @@ def home(request):
     """The landing page"""
     context = {}
     return render(request, 'common/index.html', context)
+
+
+# Profile view
+@login_required(login_url='accounts:login')
+def profile_view(request, user_id):
+    """View to display user profile including followers and following lists"""
+    user = get_object_or_404(CustomUser, id=user_id)
+    profile = user.profile
+    followers = profile.followers.all()
+    following = profile.following.all()
+    
+    context = {
+        'user': user,
+        'followers': followers,
+        'following': following,
+    }
+    return render(request, 'accounts/profile.html', context)
