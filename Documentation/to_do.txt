@@ -3,9 +3,10 @@ Doing: ⚒️
    -  Create a `MissingPerson` model in the `posts` app. ✅
    -  Create forms for submitting missing persons' information. ✅
    -  Implement views for posting missing persons' details. ✅
-   -  Email upon posting..
-   -  Design templates for displaying and viewing missing persons' details.
-
+   -  Email upon posting. ✅
+   -  Design views/logic, for displaying and viewing missing persons' details. ✅
+   -  Design views/logic, for updating the missing persons' details, only for the user who posted. ✅
+   -  Design views/logic, for deleting the missing persons' details, only for the user who posted. ✅
 
 2. Following and Followers:
    - Following and Followers:
@@ -31,3 +32,5 @@ Done ✅
      -  Implement user registration, login, and logout.
      -  Customize the user model if needed.
      -  Email upon successful registration
+
+
