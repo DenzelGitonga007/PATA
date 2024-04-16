@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm # custom user creation forms
 from .models import CustomUser
+from posts.models import MissingPerson
 from django.contrib import messages 
 from django.core.mail import EmailMessage # send_mail # to send the mail after successful email creation
 from django.conf import settings
@@ -16,7 +17,7 @@ def user_creation_view(request):
         form = CustomerUserCreationForm(request.POST) # initialize the form
         if form.is_valid():
             user = form.save()
-            UserProfile.objects.create(user=user)  # Create UserProfile for the new user
+            # UserProfile.objects.create(user=user)  # Create UserProfile for the new user
             user_email = form.cleaned_data.get('email') # get the user's email
             # Successful creation
             # send the email
@@ -84,18 +85,20 @@ def home(request):
     return render(request, 'common/index.html', context)
 
 
-# Profile view
-@login_required(login_url='accounts:login')
-def profile_view(request, user_id):
-    """View to display user profile including followers and following lists"""
-    user = get_object_or_404(CustomUser, id=user_id)
-    profile = user.profile
-    followers = profile.followers.all()
-    following = profile.following.all()
-    
+# The User's profile
+@login_required
+def user_profile(request, user_id):
+    profile_user = get_object_or_404(CustomUser, id=user_id)
+    followers = profile_user.following_me.all()
+    following = profile_user.following_them.all()
+    # Get posts related to the user if you have a post model
+    # posts = profile_user.posts.all()
+    posts = MissingPerson.objects.filter(user_id=user_id).order_by('-created_at')
+
     context = {
-        'user': user,
-        'followers': followers,
+        'profile_user': profile_user,
         'following': following,
+        'followers': followers,
+        'posts': posts,
     }
     return render(request, 'accounts/profile.html', context)

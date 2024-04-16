@@ -13,28 +13,11 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return "{}".format(self.username or self.get_full_name())
 
+
 class UserProfile(models.Model):
-    """The User's profile, with followers"""
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    followers = models.ManyToManyField(CustomUser, related_name='following')
+    followers = models.ManyToManyField(CustomUser, related_name='following_me')
+    following = models.ManyToManyField(CustomUser, related_name='following_them')
 
     def __str__(self):
         return str(self.user)
-    
-    def follow(self, user):
-        """
-        Method to follow another user
-        """
-        self.followers.add(user)
-
-    def unfollow(self, user):
-        """
-        Method to unfollow another user
-        """
-        self.followers.remove(user)
-
-    def is_following(self, user):
-        """
-        Method to check if the user is following another user
-        """
-        return self.followers.filter(pk=user.pk).exists()

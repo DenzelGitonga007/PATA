@@ -8,6 +8,5 @@ urlpatterns = [
     path('login/', views.authentication_view, name='login'), # login url
     path('logout/', views.logout_user, name='logout'), # logout user
     path('', views.home, name='home'), # the home page
-    path('profile/<int:user_id>/', views.profile_view, name='profile'), # view profile
-
+    path('profile/<int:user_id>/', views.user_profile, name='profile'), # user's profile
 ]

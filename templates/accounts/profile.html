@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile - {{ profile_user.username }}</h1>
+
+    <h2>Following</h2>
+    <ul>
+        {% for followed_user in following %}
+            <li>{{ followed_user.username }}</li>
+        {% empty %}
+            <li>Not following anyone yet</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Followers</h2>
+    <ul>
+        {% for follower in followers %}
+            <li>{{ follower.username }}</li>
+        {% empty %}
+            <li>No followers yet</li>
+        {% endfor %}
+    </ul>
+
+    <!-- If you have posts, display them here -->
+    
+    <h2>Posts</h2>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post.name }}</li>
+        {% empty %}
+            <li>No posts yet</li>
+            <a href="{% url 'posts:create_missing_person' %}">Add a post</a>
+        {% endfor %}
+    </ul>
+   
+</body>
+</html>
