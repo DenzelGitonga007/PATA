@@ -1,18 +1,10 @@
 Doing: ⚒️
-3. Posting Missing Persons' Details:
-   -  Create a `MissingPerson` model in the `posts` app. ✅
-   -  Create forms for submitting missing persons' information. ✅
-   -  Implement views for posting missing persons' details. ✅
-   -  Email upon posting. ✅
-   -  Design views/logic, for displaying and viewing missing persons' details. ✅
-   -  Design views/logic, for updating the missing persons' details, only for the user who posted. ✅
-   -  Design views/logic, for deleting the missing persons' details, only for the user who posted. ✅
 
 2. Following and Followers:
-   - Following and Followers:
-     -  Create a `UserProfile` model in the `accounts` app.
-     -  Implement a view for users to follow/unfollow each other.
-     -  Design templates to display followers and following lists.
+   - Make it possible to click on usernames from the posts being displayed, and once click, it redirects to the profile of the user, and gives the option of following or unfollowing, if already following
+   - Users to have their profiles, users' profiles, where by, the following are displayed:
+      - Following and Followers with counts
+      - Their posts ✅
 
 
 4. Respond to Posts:
@@ -32,5 +24,14 @@ Done ✅
      -  Implement user registration, login, and logout.
      -  Customize the user model if needed.
      -  Email upon successful registration
+
+3. Posting Missing Persons' Details:
+   -  Create a `MissingPerson` model in the `posts` app. ✅
+   -  Create forms for submitting missing persons' information. ✅
+   -  Implement views for posting missing persons' details. ✅
+   -  Email upon posting. ✅
+   -  Design views/logic, for displaying and viewing missing persons' details. ✅
+   -  Design views/logic, for updating the missing persons' details, only for the user who posted. ✅
+   -  Design views/logic, for deleting the missing persons' details, only for the user who posted. ✅
 
 
