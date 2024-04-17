@@ -7,11 +7,12 @@
     <title>{{ user.username }}'s Profile</title>
 </head>
 <body>
+    <a href="{% url 'posts:posts_index' %}">Back</a>
     <h1>{{ user.username }}'s Profile</h1>
     <p>Email: {{ user.email }}</p>
     <!-- You can display any other user information here -->
 
-    <h2>User Profile</h2>
-    <!-- Display additional profile information here if needed -->
+    <h2>Posts</h2>
+    <!-- Display posts here -->
 </body>
 </html>
