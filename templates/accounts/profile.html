@@ -10,9 +10,26 @@
     <a href="{% url 'posts:posts_index' %}">Back</a>
     <h1>{{ user.username }}'s Profile</h1>
     <p>Email: {{ user.email }}</p>
-    <!-- You can display any other user information here -->
+
+    <!-- Follow/Unfollow -->
+    {% if user != request.user %} <!-- To prevent user from following themselves -->
+        {% if is_following %}
+            <form method="post" action="{% url 'accounts:user_profile' username=user.username %}">
+                {% csrf_token %}
+                <button type="submit" name="unfollow">Unfollow</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'accounts:user_profile' username=user.username %}">
+                {% csrf_token %}
+                <button type="submit" name="follow">Follow</button>
+            </form>
+        {% endif %}
+    {% endif %}
+    <!-- End of follow/unfollow -->
+    
 
     <h2>Posts</h2>
     <!-- Display posts here -->
+
 </body>
 </html>

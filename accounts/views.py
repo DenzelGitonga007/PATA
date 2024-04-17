@@ -84,15 +84,32 @@ def home(request):
     context = {}
     return render(request, 'common/index.html', context)
 
-
+# User profile
 @login_required(login_url='accounts:login')
 def user_profile(request, username):
     """Display user profile"""
     user = get_object_or_404(CustomUser, username=username)
     profile = get_object_or_404(UserProfile, user=user)
+
+
+    # Check if the current user is already following the user
+    is_following = profile.followers.filter(username=request.user.username).exists()
+
+    # Add follower
+    if request.method == 'POST':
+        # Check if the user has clicked "follow"
+        if 'follow' in request.POST:
+            # Check that they're not already following the user
+            if not is_following:
+                profile.followers.add(request.user)
+        elif 'unfollow' in request.POST:
+            if is_following:
+                profile.followers.remove(request.user)
+        return redirect('accounts:user_profile', username=username)
     
     context = {
         'user': user,
-        'profile': profile
+        'profile': profile,
+        'is_following': is_following,
     }
     return render(request, 'accounts/profile.html', context)
