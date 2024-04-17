@@ -12,6 +12,8 @@
     <p>Email: {{ user.email }}</p>
 
     <!-- Follow/Unfollow -->
+    <p>Followers: {{ followers_count }}</p>
+    <p>Following: {{ following_count }}</p>
     {% if user != request.user %} <!-- To prevent user from following themselves -->
         {% if is_following %}
             <form method="post" action="{% url 'accounts:user_profile' username=user.username %}">

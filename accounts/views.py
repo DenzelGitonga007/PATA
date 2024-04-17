@@ -101,15 +101,22 @@ def user_profile(request, username):
         if 'follow' in request.POST:
             # Check that they're not already following the user
             if not is_following:
-                profile.followers.add(request.user)
+                profile.followers.add(request.user) # add that user to the list of user following them
+                # also add the count of the users the user is following, the 'following_them' 
         elif 'unfollow' in request.POST:
             if is_following:
                 profile.followers.remove(request.user)
+                # also remove the count of the users the user is following, the 'following_them'
         return redirect('accounts:user_profile', username=username)
     
+    followers_count = profile.followers.count() # how many followers a user has
+    following_count = profile.following.count() # how many users are following the user
+
     context = {
         'user': user,
         'profile': profile,
         'is_following': is_following,
+        'followers_count': followers_count,
+        'following_count': following_count,
     }
     return render(request, 'accounts/profile.html', context)
