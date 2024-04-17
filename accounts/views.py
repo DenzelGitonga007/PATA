@@ -17,7 +17,8 @@ def user_creation_view(request):
         form = CustomerUserCreationForm(request.POST) # initialize the form
         if form.is_valid():
             user = form.save()
-            UserProfile.objects.create(user=user)  # Create UserProfile for the new user
+            # Create UserProfile for the new user
+            # UserProfile.objects.create(user=user)
             user_email = form.cleaned_data.get('email') # get the user's email
             # Successful creation
             # send the email
@@ -84,6 +85,7 @@ def home(request):
     context = {}
     return render(request, 'common/index.html', context)
 
+
 # User profile
 @login_required(login_url='accounts:login')
 def user_profile(request, username):
@@ -91,26 +93,30 @@ def user_profile(request, username):
     user = get_object_or_404(CustomUser, username=username)
     profile = get_object_or_404(UserProfile, user=user)
 
-
     # Check if the current user is already following the user
     is_following = profile.followers.filter(username=request.user.username).exists()
 
-    # Add follower
+    # Get the counts of followers and following
+    followers_count = profile.followers.count()
+    following_count = profile.following.count()
+
     if request.method == 'POST':
-        # Check if the user has clicked "follow"
         if 'follow' in request.POST:
-            # Check that they're not already following the user
             if not is_following:
-                profile.followers.add(request.user) # add that user to the list of user following them
-                # also add the count of the users the user is following, the 'following_them' 
+                # Add the current user to the followers of the profile user
+                profile.followers.add(request.user)
+                # Increase the following count of the current user
+                request.user.userprofile.following.add(profile.user)
+                # Redirect back to the profile
+                return redirect('accounts:user_profile', username=username)
         elif 'unfollow' in request.POST:
             if is_following:
+                # Remove the current user from the followers of the profile user
                 profile.followers.remove(request.user)
-                # also remove the count of the users the user is following, the 'following_them'
-        return redirect('accounts:user_profile', username=username)
-    
-    followers_count = profile.followers.count() # how many followers a user has
-    following_count = profile.following.count() # how many users are following the user
+                # Decrease the following count of the current user
+                request.user.userprofile.following.remove(profile.user)
+                # Redirect back to the profile
+                return redirect('accounts:user_profile', username=username)
 
     context = {
         'user': user,

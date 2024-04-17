@@ -6,7 +6,7 @@ from .models import CustomUser, UserProfile
 # The customuser admin model
 class CustomUserAdmin(admin.ModelAdmin):
     """Custom user model for the admin site"""
-    list_display = ['username', 'email', 'user_type', 'profile', 'is_superuser']
+    list_display = ['username', 'email', 'user_type', 'is_superuser']
     list_filter = ['user_type', 'is_superuser']
     search_fields = ['username', 'email', 'user_type', 'is_superuser']
 
