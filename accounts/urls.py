@@ -8,5 +8,5 @@ urlpatterns = [
     path('login/', views.authentication_view, name='login'), # login url
     path('logout/', views.logout_user, name='logout'), # logout user
     path('', views.home, name='home'), # the home page
-    path('profile/<int:user_id>/', views.user_profile, name='profile'), # user's profile
+    path('profile/<str:username>/', views.user_profile, name='user_profile'), # view users profile
 ]

@@ -17,7 +17,7 @@ def user_creation_view(request):
         form = CustomerUserCreationForm(request.POST) # initialize the form
         if form.is_valid():
             user = form.save()
-            # UserProfile.objects.create(user=user)  # Create UserProfile for the new user
+            UserProfile.objects.create(user=user)  # Create UserProfile for the new user
             user_email = form.cleaned_data.get('email') # get the user's email
             # Successful creation
             # send the email
@@ -85,20 +85,14 @@ def home(request):
     return render(request, 'common/index.html', context)
 
 
-# The User's profile
-@login_required
-def user_profile(request, user_id):
-    profile_user = get_object_or_404(CustomUser, id=user_id)
-    followers = profile_user.following_me.all()
-    following = profile_user.following_them.all()
-    # Get posts related to the user if you have a post model
-    # posts = profile_user.posts.all()
-    posts = MissingPerson.objects.filter(user_id=user_id).order_by('-created_at')
-
+@login_required(login_url='accounts:login')
+def user_profile(request, username):
+    """Display user profile"""
+    user = get_object_or_404(CustomUser, username=username)
+    profile = get_object_or_404(UserProfile, user=user)
+    
     context = {
-        'profile_user': profile_user,
-        'following': following,
-        'followers': followers,
-        'posts': posts,
+        'user': user,
+        'profile': profile
     }
     return render(request, 'accounts/profile.html', context)
