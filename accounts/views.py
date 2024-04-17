@@ -92,6 +92,9 @@ def user_profile(request, username):
     """Display user profile"""
     user = get_object_or_404(CustomUser, username=username)
     profile = get_object_or_404(UserProfile, user=user)
+    
+    # Filter posts of the user
+    posts = user.missingperson_set.all()
 
     # Check if the current user is already following the user
     is_following = profile.followers.filter(username=request.user.username).exists()
@@ -121,6 +124,7 @@ def user_profile(request, username):
     context = {
         'user': user,
         'profile': profile,
+        'posts': posts,
         'is_following': is_following,
         'followers_count': followers_count,
         'following_count': following_count,
