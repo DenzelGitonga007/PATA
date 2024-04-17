@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>User Profile - {{ profile_user.username }}</h1>
-
+    <!-- Display just for the original user -->
     <h2>Following</h2>
     <ul>
         {% for followed_user in following %}
@@ -16,11 +16,10 @@
             <li>Not following anyone yet</li>
         {% endfor %}
     </ul>
-
+    
     <h2>Followers</h2>
     <ul>
         {% for follower in followers %}
-            <li>{{ follower.username }}</li>
         {% empty %}
             <li>No followers yet</li>
         {% endfor %}
