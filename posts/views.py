@@ -52,12 +52,11 @@ def create_missing_person(request):
     context = {'form': form}
     return render(request, 'posts/create_missing_person.html', context)
 
-
-# Read 1
+# Read 1-- Display all posts
 @login_required(login_url='accounts:login')
 def posts_index(request):
     """
-    Fetch or display all posts
+    Fetch and display all posts
     """
     posts = MissingPerson.objects.all().order_by('-created_at')
     # If the user has just posted, their post should appear first
@@ -67,19 +66,37 @@ def posts_index(request):
             user_post = user_posts.first()
             other_posts = posts.exclude(pk=user_post.pk)
             posts = [user_post] + list(other_posts)
-    context = {'posts': posts}
+    
+    # Fetch comments and reactions for each post
+    post_data = []
+    for post in posts:
+        comments = post.comment_set.all()  # Retrieve comments for each post
+        reactions = post.reaction_set.all()  # Retrieve reactions for each post
+        post_data.append({
+            'post': post,
+            'comments': comments,
+            'reactions': reactions,
+        })
+    
+    context = {'post_data': post_data}
     return render(request, 'posts/posts_index.html', context)
+
+
 
 # Read 2 -- viewing the details: only viewing
 @login_required(login_url='accounts:login')
 def view_post_details(request, post_id):
     """
     View the particular post details
-
     """
     post = get_object_or_404(MissingPerson, pk=post_id)
+    comments = post.comment_set.all()  # Retrieve comments for the post
+    reactions = post.reaction_set.all()  # Retrieve reactions for the post
+    
     context = {
         'post': post,
+        'comments': comments,
+        'reactions': reactions,
     }
     return render(request, 'posts/view_post_details.html', context)
 

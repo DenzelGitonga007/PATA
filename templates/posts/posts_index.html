@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Posts</title>
 </head>
-
 <body>
     <h1>All Missing Person Posts</h1>
     <button><a href="{% url 'posts:create_missing_person' %}">Post</a></button>
-    {% for post in posts %}
+    
+    {% for data in post_data %}
         <div>
-            <h2>{{ post.name }}</h2>
-            <p>{{ post.description }}</p>
-            <p>Location: {{ post.location }}</p>
-            <p>Date Missing: {{ post.date_missing }}</p>
-            <p>Posted by:<a href="{% url 'accounts:user_profile' username=post.user.username %}">{{ post.user.username }}</a></p>
-            <!-- Display image -->
-            <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo">
+            <h2>{{ data.post.name }}</h2>
+            <p>{{ data.post.description }}</p>
+            <p>Location: {{ data.post.location }}</p>
+            <p>Date Missing: {{ data.post.date_missing }}</p>
+            <p>Posted by: <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></p>
+            <img src="{{ data.post.photo.url }}" alt="{{ data.post.name }} Photo">
             
             <!-- Buttons for reactions and comments -->
             <div>
-                <button><a href="{% url 'posts:comment_on_post' post.id %}">Comment</a></button>
-                <button><a href="{% url 'posts:react_to_post' post.id %}">React</a></button>
+                <button><a href="{% url 'posts:comment_on_post' data.post.id %}">Comment</a></button>
+                <button><a href="{% url 'posts:react_to_post' data.post.id %}">React</a></button>
             </div>
+
+            <!-- Display comments -->
+            <h3>Comments:</h3>
+            {% for comment in data.comments %}
+                <div>
+                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                    <p><em>Posted on: {{ comment.timestamp }}</em></p>
+                </div>
+            {% endfor %}
             
-            <button><a href="{% url 'posts:view_post_details' post.id %}">View More Details</a></button>
+            <!-- Display reactions -->
+            <h3>Reactions:</h3>
+            {% for reaction in data.reactions %}
+                <div>
+                    <p><strong>{{ reaction.user.username }}:</strong> {{ reaction.get_type_display }}</p>
+                    <p><em>Posted on: {{ reaction.timestamp }}</em></p>
+                </div>
+            {% endfor %}
+            
+            <button><a href="{% url 'posts:view_post_details' post_id=data.post.id %}">View More Details</a></button>
         </div>
     {% endfor %}
 </body>
-
 </html>
