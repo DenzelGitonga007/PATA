@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')), # urls for the accounts app
-    path('posts/', include('posts.urls')) # urls for the posts app
+    path('posts/', include('posts.urls')), # urls for the posts app
+    path('chat/', include('chat.urls')), # chat urls
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

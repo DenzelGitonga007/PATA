@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversation List</title>
+</head>
+<body>
+    <h1>Conversation List</h1>
+    <ul>
+        {% for conversation in conversations %}
+            <!-- Get the other user's username using the other_user method -->
+            <li><a href="{% url 'chat:conversation_detail' conversation.id %}">Conversation with {{ conversation.other_user }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

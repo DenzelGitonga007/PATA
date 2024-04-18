@@ -29,6 +29,13 @@
     {% endif %}
     <!-- End of follow/unfollow -->
     
+    <!-- Link to conversations or message button -->
+    {% if user == request.user %}
+        <p><a href="{% url 'chat:conversation_list' %}">Conversations</a></p>
+    {% else %}
+        <p><a href="{% url 'chat:start_conversation' username=user.username %}">Message</a></p>
+    {% endif %}
+
 
     <h2>Posts</h2>
     <!-- Display posts here -->
@@ -45,7 +52,6 @@
         </div>
         <button><a href="{% url 'posts:view_post_details' post.id %}">View More Details</a></button>
     {% endfor %}
-
 
 </body>
 </html>

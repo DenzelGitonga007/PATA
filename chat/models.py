@@ -2,20 +2,25 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-User = get_user_model() # the user from accounts app
+User = get_user_model()
 
 class Conversation(models.Model):
     """The Chats model"""
-    # Many-to-many relationship with users to store participants of the conversation
     participants = models.ManyToManyField(User, related_name='conversations')
-    
-    # Timestamp to track when the conversation was last updated
     last_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        # Display the participants' usernames as the representation of the conversation
         return ', '.join([str(participant) for participant in self.participants.all()])
 
+    def other_user(self, current_user):
+        """
+        Returns the other user in the conversation.
+        """
+        return self.participants.exclude(pk=current_user.pk).first()
+
+
+
+# Messages in the chats/conversations
 class Message(models.Model):
     """The messages in the chats"""
     # Foreign key to link messages to their respective conversations

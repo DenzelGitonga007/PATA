@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversation Detail</title>
+</head>
+<body>
+    <h1>Conversation Detail</h1>
+    <h2>Participants:</h2>
+    <ul>
+        {% for participant in conversation.participants.all %}
+            <li>{{ participant.username }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Messages:</h2>
+    <!-- conversation_detail.html -->
+
+    {% for message in messages %}
+        <p>{{ message.sender.username }}: {{ message.text }}</p>
+    {% endfor %}
+
+    <form id="message-form" method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        // Submit message form via AJAX
+        document.getElementById('message-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Reload the page to display new messages
+                    window.location.reload();
+                } else {
+                    // Handle form validation errors
+                    console.error(data.errors);
+                }
+            })
+            .catch(error => console.error(error));
+        });
+    </script>
+
+
+</body>
+</html>
