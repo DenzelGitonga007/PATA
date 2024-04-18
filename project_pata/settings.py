@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # My apps
     'accounts', # user authentication and management
     'posts', # manage posts
+    'chat', # handle users chats
 
 ]
 
