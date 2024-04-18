@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import MissingPerson
-from .forms import MissingPersonForm
+from .models import MissingPerson, Comment, Reaction
+from .forms import MissingPersonForm, CommentForm, ReactionForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
@@ -128,3 +128,52 @@ def delete_post(request, post_id):
         post.delete()
         messages.success(request, 'Your post has been deleted successfully!')
         return redirect('posts:posts_index')
+
+
+
+
+# View to handle comments
+@login_required
+def comment_on_post(request, post_id):
+    post = get_object_or_404(MissingPerson, id=post_id)
+    form = CommentForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post = post
+        comment.save()
+        
+        # Notify the post owner
+        messages.info(request, f'New comment on your post by {request.user.username}')
+        
+        return redirect('posts:view_post_details', post_id=post_id)
+    
+    context = {
+        'form': form,
+        'post': post
+        }
+    
+    return render(request, 'posts/comment_form.html', context)
+
+# View to handle reactions
+@login_required
+def react_to_post(request, post_id):
+    post = get_object_or_404(MissingPerson, id=post_id)
+    form = ReactionForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        reaction = form.save(commit=False)
+        reaction.user = request.user
+        reaction.post = post
+        reaction.save()
+        
+        # Notify the post owner
+        messages.info(request, f'New reaction on your post by {request.user.username}') # notify the user who posted the post
+        
+        return redirect('posts:view_post_details', post_id=post_id)
+    
+    context = {
+        'form': form,
+        'post': post
+        }
+    
+    return render(request, 'posts/reaction_form.html', context)

@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model # to reference the user model
 from django.core.validators import FileExtensionValidator, MaxValueValidator
+from django.utils import timezone
+from django.conf import settings
+
 
 # Create your models here.
 
@@ -31,3 +34,32 @@ class MissingPerson(models.Model): # the missing persons details
     def __str__(self):
         """Stringify the name"""
         return self.name
+    
+
+# Comments
+class Comment(models.Model):
+    """Comments model"""
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(MissingPerson, on_delete=models.CASCADE)
+    text = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+
+    def __str__(self):
+        return "Comment by {} on {}".format((self.user.username), (self.timestamp))
+    
+
+
+# Reactions
+class Reaction(models.Model):
+    """Reactions model"""
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(MissingPerson, on_delete=models.CASCADE)
+    type_choices = [
+        ('sympathize', 'Sympathize'),
+    ]
+    type = models.CharField(max_length=10, choices=type_choices)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return "{} by {} on {}".format(self.get_type_display(), self.user.username, self.timestamp)
