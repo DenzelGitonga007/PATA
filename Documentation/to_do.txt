@@ -1,16 +1,13 @@
-Doing: ⚒️
+To-do: ⚒️
 
-2. Following and Followers:
-   - Make it possible to click on usernames from the posts being displayed, and once click, it redirects to the profile of the user, and gives the option of following or unfollowing, if already following
-   - Users to have their profiles, users' profiles, where by, the following are displayed:
-      - Following and Followers with counts
-      - Their posts ✅
+5. Respond to Posts:
+   -  Users to react to the missing person post:
+      - Comments
+      - Like, or dislike, or sympathise
+   - Notify the user who posted the post, that someone has commented, or liked their post
 
-
-4. Respond to Posts:
-   -  Implement a view for users to respond to missing person posts.
-   -  Allow anyone, including followers and non-followers, to submit responses.
-   -  Design templates for displaying responses to missing person posts.
+6. Chat:
+   - Make it possible for users to chat on the system, in case they want to follow up on some lead, or information about the missing person
 
 
 Done ✅
@@ -33,5 +30,12 @@ Done ✅
    -  Design views/logic, for displaying and viewing missing persons' details. ✅
    -  Design views/logic, for updating the missing persons' details, only for the user who posted. ✅
    -  Design views/logic, for deleting the missing persons' details, only for the user who posted. ✅
+
+4. Following and Followers:
+   - Make it possible to click on usernames from the posts being displayed, and once click, it redirects to the profile of the user. ✅
+   - On the profile of the user, have the option of following if not already following, or unfollowing, if already following. ✅
+   - Users to have their profiles, users' profiles, where by, the following are displayed:
+      - Following and Followers with counts ✅
+      - Their posts ✅
 
 
