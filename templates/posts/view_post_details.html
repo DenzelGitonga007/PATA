@@ -29,8 +29,18 @@
             <div>
                 <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
                 <p><em>Posted on: {{ comment.timestamp }}</em></p>
+                <!-- Button to reply to this comment -->
+                <button><a href="{% url 'posts:reply_to_comment' comment.id %}">Reply</a></button>
             </div>
+            <!-- Display replies to this comment -->
+            {% for reply in comment.replies.all %}
+                <div style="margin-left: 20px;">
+                    <p><strong>{{ reply.user.username }} (Reply to {{ comment.user.username }}):</strong> {{ reply.text }}</p>
+                    <p><em>Replied on: {{ reply.timestamp }}</em></p>
+                </div>
+            {% endfor %}
         {% endfor %}
+
         
         <!-- Display reactions -->
         <h3>Reactions:</h3>

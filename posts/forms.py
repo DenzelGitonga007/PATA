@@ -1,5 +1,5 @@
 from django import forms
-from . models import MissingPerson, Comment, Reaction
+from . models import CommentReply, MissingPerson, Comment, Reaction
 
 # Form the fill the missing person details
 class MissingPersonForm(forms.ModelForm):
@@ -17,6 +17,12 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['text']
+
+# Comment reply
+class CommentReplyForm(forms.ModelForm):
+    class Meta:
+        model = CommentReply
+        fields = ['text']        
 
 # Form for creating a reaction
 class ReactionForm(forms.ModelForm):

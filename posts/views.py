@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import MissingPerson, Comment, Reaction
-from .forms import MissingPersonForm, CommentForm, ReactionForm
+from .forms import CommentReplyForm, MissingPersonForm, CommentForm, ReactionForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
@@ -148,9 +148,8 @@ def delete_post(request, post_id):
 
 
 
-
-# View to handle comments
-@login_required
+# Comment
+@login_required(login_url='accounts/login')
 def comment_on_post(request, post_id):
     post = get_object_or_404(MissingPerson, id=post_id)
     form = CommentForm(request.POST or None)
@@ -168,9 +167,36 @@ def comment_on_post(request, post_id):
     context = {
         'form': form,
         'post': post
-        }
+    }
     
     return render(request, 'posts/comment_form.html', context)
+
+
+
+# Reply to comment
+@login_required(login_url='accounts/login')
+def reply_to_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    form = CommentReplyForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        reply = form.save(commit=False)
+        reply.user = request.user
+        reply.comment = comment  # Assign the parent comment
+        reply.save()
+        
+        # Notify the parent comment owner
+        messages.info(request, f'New reply to your comment by {request.user.username}')
+        
+        return redirect('posts:view_post_details', post_id=comment.post.id)
+    
+    context = {
+        'form': form,
+        'comment': comment
+    }
+    
+    return render(request, 'posts/reply_comment_form.html', context)
+
+
 
 # View to handle reactions
 @login_required

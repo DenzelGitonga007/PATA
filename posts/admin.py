@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MissingPerson, Comment, Reaction
+from .models import MissingPerson, Comment, Reaction, CommentReply
 
 # MissingPerson admin
 class MissingPersonAdmin(admin.ModelAdmin):
@@ -18,6 +18,19 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['post', 'timestamp']
 
 admin.site.register(Comment, CommentAdmin)
+
+
+# Reply comments
+
+class CommentReplyAdmin(admin.ModelAdmin):
+    """Admin to manage comment replies"""
+    list_display = ['user', 'comment', 'text', 'timestamp']
+    list_filter = ['timestamp']
+    search_fields = ['user__username', 'comment__text', 'text']
+    date_hierarchy = 'timestamp'
+
+admin.site.register(CommentReply, CommentReplyAdmin)
+
 
 # Reaction admin
 class ReactionAdmin(admin.ModelAdmin):

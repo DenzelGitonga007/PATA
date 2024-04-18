@@ -47,8 +47,18 @@ class Comment(models.Model):
 
     def __str__(self):
         return "Comment by {} on {}".format((self.user.username), (self.timestamp))
-    
 
+
+# Reply to comments   
+class CommentReply(models.Model):
+    """Model to store replies to comments"""
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies')
+    text = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return "Reply by {} on {} to comment by {}".format(self.user.username, self.timestamp, self.comment.user.username)
 
 # Reactions
 class Reaction(models.Model):
