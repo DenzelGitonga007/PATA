@@ -8,8 +8,15 @@
     <h1>Conversation List</h1>
     <ul>
         {% for conversation in conversations %}
-            <!-- Get the other user's username using the other_user method -->
-            <li><a href="{% url 'chat:conversation_detail' conversation.id %}">Conversation with {{ conversation.other_user }}</a></li>
+            {% for participant in conversation.participants.all %}
+                {% if participant != request.user %}
+                    <li>
+                        <a href="{% url 'chat:conversation_detail' conversation.id %}">
+                            {{ participant.username }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     </ul>
 </body>
