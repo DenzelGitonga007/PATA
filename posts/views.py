@@ -8,6 +8,7 @@ from django.conf import settings
 from django.http import JsonResponse
 
 
+
 """
 CRUD FOR THE POSTS:
 
@@ -154,24 +155,26 @@ def delete_post(request, post_id):
 @login_required(login_url='accounts/login')
 def comment_on_post(request, post_id):
     post = get_object_or_404(MissingPerson, id=post_id)
-    form = CommentForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        comment = form.save(commit=False)
-        comment.user = request.user
-        comment.post = post
-        comment.save()
-        
-        # Notify the post owner
-        messages.info(request, f'New comment on your post by {request.user.username}')
-        
-        return redirect('posts:view_post_details', post_id=post_id)
     
-    context = {
-        'form': form,
-        'post': post
-    }
-    
-    return render(request, 'posts/comment_form.html', context)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = post
+            comment.save()
+            
+            # Notify the post owner
+            messages.info(request, f'New comment on your post by {request.user.username}')
+            
+            # Return a JSON response indicating success
+            return JsonResponse({'success': True})
+        else:
+            # Return a JSON response with form errors if the form is not valid
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    else:
+        # Return a JSON response with an error if the request method is not POST
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 

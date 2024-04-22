@@ -3,47 +3,106 @@
 {% block title %}All Posts{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="text-center mb-4">All Missing Person Posts</h1>
-        <a href="{% url 'posts:create_missing_person' %}" class="btn btn-primary mb-3">Post</a>
+<div class="container">
+    <h1 class="text-center mb-4">All Missing Person Posts</h1>
+    <a href="{% url 'posts:create_missing_person' %}" class="btn btn-primary mb-3">Post</a>
 
-        <div class="row">
-            {% for data in post_data %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <img src="{{ data.post.photo.url }}" class="card-img-top" alt="{{ data.post.name }} Photo" style="object-fit: cover; height: 200px;">
-                        <div class="card-body">
-                            <a href="{% url 'posts:comment_on_post' data.post.id %}" class="mr-2"><i class="fa fa-comment"></i></a>
-                            <!-- Display the like/react icon -->
-                            <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
-                                <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
-                            </span>
-                            <!-- Display the like count -->
-                            <span class="like-count" id="like-count">{{ data.post.liked_by.count }}</span>
-
-                            <!-- Reaction/Like -->
-                            <div class="reaction">
-                                <!-- Update the like button to include an id attribute -->
-
-                            </div>
-
-
-                            <h5 class="card-title">{{ data.post.name }}</h5>
-                            <p class="card-text">{{ data.post.description }}</p>
-                            <p class="card-text"><small class="text-muted">Location: {{ data.post.location }}</small></p>
-                            <p class="card-text"><small class="text-muted">Date Missing: {{ data.post.date_missing }}</small></p>
-                            <p class="card-text"><small class="text-muted">Posted by: <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></small></p>
-                        </div>
-                        <div class="card-footer">
-
-                            <a href="{% url 'posts:view_post_details' post_id=data.post.id %}" class="btn btn-primary float-right">View More Details</a>
-                        </div>
+    <div class="row">
+        {% for data in post_data %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ data.post.photo.url }}" class="card-img-top" alt="{{ data.post.name }} Photo" style="object-fit: cover; height: 200px;">
+                <div class="card-body">
+                    <a href="#" class="mr-2 comment-btn" data-post-id="{{ data.post.id }}" data-toggle="modal" data-target="#commentModal"><i class="fa fa-comment"></i></a>
+                    <!-- Display the like/react icon -->
+                    <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
+                        <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
+                    </span>
+                    <!-- Display the like count -->
+                    <span class="like-count" id="like-count">{{ data.post.liked_by.count }}</span>
+                    <!-- Reaction/Like -->
+                    <div class="reaction">
+                        <!-- Update the like button to include an id attribute -->
                     </div>
+                    <h5 class="card-title">{{ data.post.name }}</h5>
+                    <p class="card-text">{{ data.post.description }}</p>
+                    <p class="card-text"><small class="text-muted">Location: {{ data.post.location }}</small></p>
+                    <p class="card-text"><small class="text-muted">Date Missing: {{ data.post.date_missing }}</small></p>
+                    <p class="card-text"><small class="text-muted">Posted by: <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></small></p>
                 </div>
-            {% endfor %}
+                <div class="card-footer">
+                    <a href="{% url 'posts:view_post_details' post_id=data.post.id %}" class="btn btn-primary float-right">View More Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal for commenting -->
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentModalLabel">Comment on Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="comment-form" method="post" action="{% url 'posts:comment_on_post' 0 %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="comment-text">Leave a Comment:</label>
+                        <textarea class="form-control" id="comment-text" name="text" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                </form>
+            </div>
         </div>
     </div>
-     
+</div>
 
+<script>
+    $(document).ready(function () {
+        // Attach click event handler to comment buttons
+        $('.comment-btn').click(function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            
+            // Get the post ID from the button data attribute
+            var postId = $(this).data('post-id');
+
+            // Set the action attribute of the comment form to include the post ID
+            $('#comment-form').attr('action', '{% url "posts:comment_on_post" 0 %}'.replace('0', postId));
+
+            // Show the modal
+            $('#commentModal').modal('show');
+        });
+
+        // Handle form submission for commenting
+        $('#comment-form').submit(function (e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            // Serialize form data
+            var formData = $(this).serialize();
+
+            // Submit the form via AJAX
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                success: function (response) {
+                    // Optionally, you can refresh the post details section to show the new comment
+                    // Close the modal
+                    $('#commentModal').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+
+</script>
 
 {% endblock %}
