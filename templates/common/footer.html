@@ -5,8 +5,10 @@
                 <h5>Quick Links</h5>
                 <ul class="list-unstyled">
                     <li><a href="{% url 'posts:posts_index' %}">Home</a></li>
-                    <li><a href="{% url 'accounts:user_profile' username=request.user.username %}">Profile</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'accounts:user_profile' username=user.username %}">Profile</a></li>
                     <li><a href="{% url 'chat:conversation_list' %}">Conversations</a></li>
+                    {% endif %}
                 </ul>
             </div>
             <div class="col-md-6">
