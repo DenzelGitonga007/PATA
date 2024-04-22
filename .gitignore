@@ -3,3 +3,4 @@ env_pata/
 db.sqlite3
 media/missing_persons_photos
 code_trial.py
+code_trial.html
