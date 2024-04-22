@@ -1,12 +1,12 @@
 from django import forms
-from . models import CommentReply, MissingPerson, Comment, Reaction
+from . models import CommentReply, MissingPerson, Comment
 
 # Form the fill the missing person details
 class MissingPersonForm(forms.ModelForm):
     """Form to fill the missing person details"""
     class Meta:
         model = MissingPerson
-        exclude = ['user','created_at']
+        exclude = ['user','created_at', 'liked_by']
         widgets = {
             'date_missing': forms.DateInput(attrs={'time': 'date'}),
         }
@@ -23,9 +23,3 @@ class CommentReplyForm(forms.ModelForm):
     class Meta:
         model = CommentReply
         fields = ['text']        
-
-# Form for creating a reaction
-class ReactionForm(forms.ModelForm):
-    class Meta:
-        model = Reaction
-        fields = ['type']

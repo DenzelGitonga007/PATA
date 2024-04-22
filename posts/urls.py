@@ -15,5 +15,5 @@ urlpatterns = [
     path('comment/<int:post_id>/', views.comment_on_post, name='comment_on_post'), # comment on post
     path('comment/<int:comment_id>/reply/', views.reply_to_comment, name='reply_to_comment'), # reply to comment
     path('react/<int:post_id>/', views.react_to_post, name='react_to_post'), # react to post
-    
+
 ]

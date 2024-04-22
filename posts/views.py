@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import MissingPerson, Comment, Reaction
-from .forms import CommentReplyForm, MissingPersonForm, CommentForm, ReactionForm
+from .models import MissingPerson, Comment
+from .forms import CommentReplyForm, MissingPersonForm, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.http import JsonResponse
+
 
 """
 CRUD FOR THE POSTS:
@@ -71,11 +73,11 @@ def posts_index(request):
     post_data = []
     for post in posts:
         comments = post.comment_set.all()  # Retrieve comments for each post
-        reactions = post.reaction_set.all()  # Retrieve reactions for each post
+        # reactions = post.reaction_set.all()  # Retrieve reactions for each post
         post_data.append({
             'post': post,
             'comments': comments,
-            'reactions': reactions,
+            # 'reactions': reactions,
         })
     
     context = {'post_data': post_data}
@@ -91,12 +93,12 @@ def view_post_details(request, post_id):
     """
     post = get_object_or_404(MissingPerson, pk=post_id)
     comments = post.comment_set.all()  # Retrieve comments for the post
-    reactions = post.reaction_set.all()  # Retrieve reactions for the post
+    # reactions = post.reaction_set.all()  # Retrieve reactions for the post
     
     context = {
         'post': post,
         'comments': comments,
-        'reactions': reactions,
+        
     }
     return render(request, 'posts/view_post_details.html', context)
 
@@ -198,25 +200,24 @@ def reply_to_comment(request, comment_id):
 
 
 
-# View to handle reactions
-@login_required
+# Liking a post
+@login_required(login_url='accounts:login')
 def react_to_post(request, post_id):
-    post = get_object_or_404(MissingPerson, id=post_id)
-    form = ReactionForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        reaction = form.save(commit=False)
-        reaction.user = request.user
-        reaction.post = post
-        reaction.save()
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        post = get_object_or_404(MissingPerson, pk=post_id)
         
-        # Notify the post owner
-        messages.info(request, f'New reaction on your post by {request.user.username}') # notify the user who posted the post
+        # Toggle like for the current user
+        post.toggle_like(request.user)
         
-        return redirect('posts:view_post_details', post_id=post_id)
-    
-    context = {
-        'form': form,
-        'post': post
-        }
-    
-    return render(request, 'posts/reaction_form.html', context)
+        # Save the post instance to persist changes to the database
+        post.save()
+        
+        # Get the updated like count for the post
+        like_count = post.liked_by.count()
+        
+        # Return JSON response with the updated like count
+        return JsonResponse({'likeCount': like_count})
+    else:
+        # Handle invalid request method or non-ajax request
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+

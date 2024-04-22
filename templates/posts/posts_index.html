@@ -1,48 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>All Posts</title>
-</head>
-<body>
-    <h1>All Missing Person Posts</h1>
-    <button><a href="{% url 'posts:create_missing_person' %}">Post</a></button>
-    
-    {% for data in post_data %}
-        <div>
-            <h2>{{ data.post.name }}</h2>
-            <p>{{ data.post.description }}</p>
-            <p>Location: {{ data.post.location }}</p>
-            <p>Date Missing: {{ data.post.date_missing }}</p>
-            <p>Posted by: <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></p>
-            <img src="{{ data.post.photo.url }}" alt="{{ data.post.name }} Photo">
-            
-            <!-- Buttons for reactions and comments -->
-            <div>
-                <button><a href="{% url 'posts:comment_on_post' data.post.id %}">Comment</a></button>
-                <button><a href="{% url 'posts:react_to_post' data.post.id %}">React</a></button>
-            </div>
+{% extends 'common/base.html' %}
 
-            <!-- Display comments -->
-            <h3>Comments:</h3>
-            {% for comment in data.comments %}
-                <div>
-                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
-                    <p><em>Posted on: {{ comment.timestamp }}</em></p>
+{% block title %}All Posts{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mb-4">All Missing Person Posts</h1>
+        <a href="{% url 'posts:create_missing_person' %}" class="btn btn-primary mb-3">Post</a>
+
+        <div class="row">
+            {% for data in post_data %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ data.post.photo.url }}" class="card-img-top" alt="{{ data.post.name }} Photo" style="object-fit: cover; height: 200px;">
+                        <div class="card-body">
+                            <a href="{% url 'posts:comment_on_post' data.post.id %}" class="mr-2"><i class="fa fa-comment"></i></a>
+
+                            <!-- Reaction/Like -->
+                            <div class="reaction">
+                                <!-- Update the like button to include an id attribute -->
+                                <!-- Display the like/react icon -->
+                                <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
+                                    <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
+                                </span>
+                                <!-- Display the like count -->
+                                <span class="like-count" id="like-count">{{ data.post.liked_by.count }}</span>
+                            </div>
+
+
+                            <h5 class="card-title">{{ data.post.name }}</h5>
+                            <p class="card-text">{{ data.post.description }}</p>
+                            <p class="card-text"><small class="text-muted">Location: {{ data.post.location }}</small></p>
+                            <p class="card-text"><small class="text-muted">Date Missing: {{ data.post.date_missing }}</small></p>
+                            <p class="card-text"><small class="text-muted">Posted by: <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></small></p>
+                        </div>
+                        <div class="card-footer">
+
+                            <a href="{% url 'posts:view_post_details' post_id=data.post.id %}" class="btn btn-primary float-right">View More Details</a>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
-            
-            <!-- Display reactions -->
-            <h3>Reactions:</h3>
-            {% for reaction in data.reactions %}
-                <div>
-                    <p><strong>{{ reaction.user.username }}:</strong> {{ reaction.get_type_display }}</p>
-                    <p><em>Posted on: {{ reaction.timestamp }}</em></p>
-                </div>
-            {% endfor %}
-            
-            <button><a href="{% url 'posts:view_post_details' post_id=data.post.id %}">View More Details</a></button>
         </div>
-    {% endfor %}
-</body>
-</html>
+    </div>
+
+
+
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const likeBtns = document.querySelectorAll(".like-btn");
+        
+            likeBtns.forEach(likeBtn => {
+                likeBtn.addEventListener("click", function() {
+                    const postId = likeBtn.dataset.postId;
+        
+                    fetch(`/posts/react/${postId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/json",
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the like count dynamically
+                        const likeCountElement = likeBtn.nextElementSibling;
+                        likeCountElement.innerText = data.likeCount;
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+                });
+            });
+        });
+    </script>
+        
+
+
+{% endblock %}

@@ -1,12 +1,17 @@
 from django.contrib import admin
-from .models import MissingPerson, Comment, Reaction, CommentReply
+from .models import MissingPerson, Comment, CommentReply
 
 # MissingPerson admin
 class MissingPersonAdmin(admin.ModelAdmin):
     """Admin manage the missing person details"""
-    list_display = ['user', 'name', 'photo', 'location', 'date_missing', 'created_at']
+    list_display = ['user', 'name', 'photo', 'location', 'date_missing', 'created_at', 'display_liked_by']
     search_fields = ['user__username', 'name', 'location', 'date_missing']
     list_filter = ['user', 'name', 'location', 'date_missing']
+
+    def display_liked_by(self, obj):
+        return ", ".join([user.username for user in obj.liked_by.all()])
+
+    display_liked_by.short_description = 'Liked by'
 
 admin.site.register(MissingPerson, MissingPersonAdmin)
 
@@ -31,12 +36,3 @@ class CommentReplyAdmin(admin.ModelAdmin):
 
 admin.site.register(CommentReply, CommentReplyAdmin)
 
-
-# Reaction admin
-class ReactionAdmin(admin.ModelAdmin):
-    """Admin for managing reactions"""
-    list_display = ['user', 'post', 'type', 'timestamp']
-    search_fields = ['user__username', 'post__name']
-    list_filter = ['type', 'timestamp']
-
-admin.site.register(Reaction, ReactionAdmin)

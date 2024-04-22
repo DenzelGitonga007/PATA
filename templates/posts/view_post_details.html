@@ -20,6 +20,9 @@
             <button><a href="{% url 'posts:comment_on_post' post.id %}">Comment</a></button>
             <button><a href="{% url 'posts:react_to_post' post.id %}">React</a></button>
         </div>
+        {% if post.user == request.user %}
+            <button><a href="{% url 'posts:delete_post' post.id %}">Delete</a></button>
+        {% endif %}
 
 
 
