@@ -19,31 +19,44 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required value="{{ form.username.value|default_if_none:"" }}">
                         {% if form.username.errors %}
                             <div class="text-danger">{{ form.username.errors.0 }}</div>
                         {% endif %}
-                        <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                        <small class="form-text text-muted">Required 150 characters or fewer. Letters, digits, and @/./+/-/_ only. Choose a unique username that identifies you on the platform.</small>
                     </div>
+                                        
                     <div class="form-group col-md-6">
                         <label for="email">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required value="{{ form.email.value|default_if_none:"" }}">
                         {% if form.email.errors %}
                             <div class="text-danger">{{ form.email.errors.0 }}</div>
                         {% endif %}
-                        <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                        <small id="emailHelp" class="form-text text-muted">We'll use it to send important notifications and updates. 
+                            It should include symbols like '@' and '.' and commonly used domain names such as 'gmail.com' or 'yahoo.com'
+                        </small>
                     </div>
+                    
+                    
+                    
 
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter your password" required>
                     <small class="form-text text-muted">Your password must contain at least 8 characters and can't be too similar to your other personal information.</small>
+                    {% if form.password1.errors %}
+                        <div class="text-danger">{{ form.password1.errors.0 }}</div>
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     <label for="confirm_password">Confirm Password</label>
                     <input type="password" class="form-control" id="password2" name="password2" placeholder="Re-enter your password" required>
+                    {% if form.password2.errors %}
+                        <div class="text-danger">{{ form.password2.errors.0 }}</div>
+                    {% endif %}
                 </div>
+                
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
             </form>
             <div class="mt-3 text-center">
