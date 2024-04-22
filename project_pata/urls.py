@@ -26,4 +26,9 @@ urlpatterns = [
     path('posts/', include('posts.urls')), # urls for the posts app
     path('chat/', include('chat.urls')), # chat urls
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Serve static and media files in development mode
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -149,7 +149,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Static files (CSS, JavaScript, images not tied to a specific model)
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
