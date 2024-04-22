@@ -1,14 +1,13 @@
 To-do: ⚒️
 
-5. Respond to Posts:
-   -  Users to react to the missing person post:
-      - Comments
-      - Like, or dislike, or sympathise
+7. UI:
+   - Work on a very nice and beautiful UI, using Bootstrap, CSS and JS for all templates.
+   - Show/display messages beautifully, and eye-catchy, and dynamically.
+   - Help facilities in the system, info texts, explaining stuff around
+
+8. Notifications:
    - Notify the user who posted the post, that someone has commented, or liked their post
-
-6. Chat:
-   - Make it possible for users to chat on the system, in case they want to follow up on some lead, or information about the missing person
-
+   - Notify a user that they've been messaged, if they're not online, or haven't seen/ opened the message
 
 Done ✅
 1. Project Setup:
@@ -37,5 +36,20 @@ Done ✅
    - Users to have their profiles, users' profiles, where by, the following are displayed:
       - Following and Followers with counts ✅
       - Their posts ✅
+
+5. Respond to Posts:
+   -  Users to react to the missing person post: ✅
+      - Comments ✅
+      - Sympathise ✅
+   
+
+6. Chat:
+   - Comments:
+      - Reply to comments ✅
+      - Delete (but this is going to be later)
+      - Edit (but this is going to be later)
+   - Make it possible for users to chat on the system, in case they want to follow up on some lead, or information about the missing person ✅
+   
+
 
 
