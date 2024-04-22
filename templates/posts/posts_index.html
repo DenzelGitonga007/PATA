@@ -14,16 +14,17 @@
                         <img src="{{ data.post.photo.url }}" class="card-img-top" alt="{{ data.post.name }} Photo" style="object-fit: cover; height: 200px;">
                         <div class="card-body">
                             <a href="{% url 'posts:comment_on_post' data.post.id %}" class="mr-2"><i class="fa fa-comment"></i></a>
+                            <!-- Display the like/react icon -->
+                            <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
+                                <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
+                            </span>
+                            <!-- Display the like count -->
+                            <span class="like-count" id="like-count">{{ data.post.liked_by.count }}</span>
 
                             <!-- Reaction/Like -->
                             <div class="reaction">
                                 <!-- Update the like button to include an id attribute -->
-                                <!-- Display the like/react icon -->
-                                <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
-                                    <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
-                                </span>
-                                <!-- Display the like count -->
-                                <span class="like-count" id="like-count">{{ data.post.liked_by.count }}</span>
+
                             </div>
 
 
