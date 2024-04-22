@@ -1,16 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-    <h1>Register</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p  }}
-        <button type="submit">Create A New Account</button>
-    </form>
-</body>
-</html>
+{% extends 'common/base.html' %}
+{% block title %}Register {{ block.super }}{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center mb-4">Create an Account</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <!-- Form fields -->
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                        {% if form.username.errors %}
+                            <div class="text-danger">{{ form.username.errors.0 }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required>
+                        {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter your password" required>
+                    <small class="form-text text-muted">Your password must contain at least 8 characters and can't be too similar to your other personal information.</small>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="Re-enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+            <div class="mt-3 text-center">
+                <p>Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

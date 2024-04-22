@@ -12,39 +12,31 @@ from .models import CustomUser, UserProfile
 
 # User creation
 def user_creation_view(request):
-    """Creates the user account"""
     if request.method == 'POST':
-        form = CustomerUserCreationForm(request.POST) # initialize the form
+        form = CustomerUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Create UserProfile for the new user
-            # UserProfile.objects.create(user=user)
-            user_email = form.cleaned_data.get('email') # get the user's email
-            # Successful creation
-            # send the email
+            user_email = form.cleaned_data.get('email')
             try:
                 email_message = EmailMessage(
-                    "Welcome to PATA", # subject
-                    "Lost a loved one? We would do our best in helping you find them. Upload their details, and you will be notified just as soon as anyone identifies them", # message
-                    settings.EMAIL_HOST_USER, # from who?
-                    [user_email], # the email of the user
+                    "Welcome to PATA",
+                    "Lost a loved one? We would do our best in helping you find them. Upload their details, and you will be notified just as soon as anyone identifies them",
+                    settings.EMAIL_HOST_USER,
+                    [user_email],
                 )
-                email_message.send() # send the email
+                email_message.send()
             except Exception as e:
                 raise Exception("Email sending failed {}".format(str(e)))
             
-            messages.success(request, 'Account created successful. You can now log in with your details')
-            return redirect('accounts:login') # take back to login page
-            
+            messages.success(request, 'Account created successfully. You can now log in.')
+            return redirect('accounts:login')
         else:
-            messages.error(request, 'Oops! Something went wrong. Try again later')
+            messages.error(request, 'Oops! Something went wrong. Please correct the errors below.')
+
     else:
         form = CustomerUserCreationForm()
     
-    # The template
-    context = {
-        'form': form
-    }
+    context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
 
