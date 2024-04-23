@@ -17,13 +17,15 @@
         
         <!-- Buttons for reactions and comments -->
         <div class="mt-4 mb-4">
-            <button class="btn btn-primary mr-2"><a href="{% url 'posts:comment_on_post' post.id %}" class="text-white">Comment</a></button>
-            <button class="btn btn-secondary mr-2"><a href="{% url 'posts:react_to_post' post.id %}" class="text-white">React</a></button>
+            <button class="btn btn-primary mr-2"><a href="{% url 'posts:react_to_post' post.id %}" class="text-white">React</a></button>
             {% if post.user == request.user %}
                 <button class="btn btn-danger"><a href="{% url 'posts:delete_post' post.id %}" class="text-white">Delete</a></button>
             {% endif %}
         </div>
     </div>
+
+    <!-- Comment button -->
+    <button class="btn btn-secondary mb-3 comment-btn" data-post-id="{{ post.id }}" data-toggle="modal" data-target="#commentModal">Comment</button>
 
     <!-- Comment section -->
     <div class="comment-section">
@@ -45,4 +47,7 @@
         {% endfor %}
     </div>
 </div>
+
+<!-- Comment modal -->
+{% include 'posts/comment_modal.html' %}
 {% endblock %}
