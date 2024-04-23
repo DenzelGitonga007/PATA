@@ -1,58 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post Details</title>
-</head>
-<body>
-    <h1>Missing Person Post Details</h1>
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Post Details{% endblock %}
+
+{% block content %}
+<div class="container post-details">
+    <h3 class="mb-4">{{ post.name }} Post Details</h3>
     
-    <div>
+    <div class="post">
         <h2>{{ post.name }}</h2>
         <p>{{ post.description }}</p>
         <p>Location: {{ post.location }}</p>
         <p>Date Missing: {{ post.date_missing }}</p>
         <p>Posted by: <a href="{% url 'accounts:user_profile' username=post.user.username %}">{{ post.user.username }}</a></p>
-        <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo">
+        <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo" class="img-fluid">
         
         <!-- Buttons for reactions and comments -->
-        <div>
-            <button><a href="{% url 'posts:comment_on_post' post.id %}">Comment</a></button>
-            <button><a href="{% url 'posts:react_to_post' post.id %}">React</a></button>
+        <div class="mt-4 mb-4">
+            <button class="btn btn-primary mr-2"><a href="{% url 'posts:comment_on_post' post.id %}" class="text-white">Comment</a></button>
+            <button class="btn btn-secondary mr-2"><a href="{% url 'posts:react_to_post' post.id %}" class="text-white">React</a></button>
+            {% if post.user == request.user %}
+                <button class="btn btn-danger"><a href="{% url 'posts:delete_post' post.id %}" class="text-white">Delete</a></button>
+            {% endif %}
         </div>
-        {% if post.user == request.user %}
-            <button><a href="{% url 'posts:delete_post' post.id %}">Delete</a></button>
-        {% endif %}
+    </div>
 
-
-
-        <!-- Display comments -->
-        <h3>Comments:</h3>
+    <!-- Comment section -->
+    <div class="comment-section">
+        <h3 class="mb-3">Comments:</h3>
         {% for comment in comments %}
-            <div>
+            <div class="comment">
                 <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
                 <p><em>Posted on: {{ comment.timestamp }}</em></p>
                 <!-- Button to reply to this comment -->
-                <button><a href="{% url 'posts:reply_to_comment' comment.id %}">Reply</a></button>
+                <button class="btn btn-info btn-sm"><a href="{% url 'posts:reply_to_comment' comment.id %}" class="text-white">Reply</a></button>
             </div>
             <!-- Display replies to this comment -->
             {% for reply in comment.replies.all %}
-                <div style="margin-left: 20px;">
+                <div class="reply">
                     <p><strong>{{ reply.user.username }} (Reply to {{ comment.user.username }}):</strong> {{ reply.text }}</p>
                     <p><em>Replied on: {{ reply.timestamp }}</em></p>
                 </div>
             {% endfor %}
         {% endfor %}
-
-        
-        <!-- Display reactions -->
-        <h3>Reactions:</h3>
-        {% for reaction in reactions %}
-            <div>
-                <p><strong>{{ reaction.user.username }}:</strong> {{ reaction.get_type_display }}</p>
-                <p><em>Posted on: {{ reaction.timestamp }}</em></p>
-            </div>
-        {% endfor %}
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
