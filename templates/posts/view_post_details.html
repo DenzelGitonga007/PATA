@@ -29,10 +29,12 @@
             
             <!-- Delete button (if user is the author) -->
             {% if post.user == request.user %}
-                <button class="btn btn-danger mb-3 mr-3">
-                    <a href="{% url 'posts:delete_post' post.id %}" class="text-white"><i class="fa fa-trash mr-2"></i></a>
+                <button type="button" class="btn btn-danger mb-3 mr-3 delete-post-btn" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <i class="fa fa-trash mr-2"></i>
                 </button>
+
             {% endif %}
+
 
             <!-- Comment button -->
             <button class="btn btn-secondary mb-3 comment-btn ml-auto" data-post-id="{{ post.id }}" data-toggle="modal" data-target="#commentModal">
@@ -68,8 +70,11 @@
     </div>
 </div>
 
+
+
 <!-- Comment modal -->
 {% include 'posts/comment_modal.html' %}
+{% include 'posts/delete_post_confirmation_modal.html' %}
 
 <script>
     // JavaScript to toggle visibility of comments
@@ -84,5 +89,15 @@
         }
     });
 </script>
+
+<script>
+    // JavaScript to trigger the modal when delete button is clicked
+    $(document).ready(function() {
+        $('.delete-post-btn').click(function() {
+            $('#confirmDeleteModal').modal('show');
+        });
+    });
+</script>
+
 
 {% endblock %}
