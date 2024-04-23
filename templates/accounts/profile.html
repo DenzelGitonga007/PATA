@@ -16,7 +16,6 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-                    <p class="card-text"><strong>Type:</strong> {{ user.get_user_type_display }}</p>
                     <p class="card-text"><strong>Followers:</strong> {{ followers_count }}</p>
                     <p class="card-text"><strong>Following:</strong> {{ following_count }}</p>
                     {% if request.user != user %}
