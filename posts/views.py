@@ -58,6 +58,9 @@ def create_missing_person(request):
     context = {'form': form}
     return render(request, 'posts/create_missing_person.html', context)
 
+
+
+
 # Read 1-- Display all posts
 @login_required(login_url='accounts:login')
 def posts_index(request):

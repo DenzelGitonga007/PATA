@@ -1,17 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Missing Person</title>
-</head>
-<body>
-    <h3>Create Missing Person</h3>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Post</button>
-        <button><a href="{% url 'accounts:home' %}">Back</a></button>
-    </form>
-</body>
-</html>
+{% extends 'common/base.html' %}
+
+{% block title %}Create Missing Person Post{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center mb-0">Create Missing Person</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="missingPersonForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required placeholder="Enter description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo">Photo</label>
+                            <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" required placeholder="Enter location">
+                        </div>
+                        <div class="form-group">
+                            <label for="date_missing">Date Missing</label>
+                            <input type="date" class="form-control" id="date_missing" name="date_missing" required placeholder="Select date">
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tooltip Script -->
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<!-- Client-side Validation Script -->
+<script>
+    // Example of client-side validation using jQuery
+    $(document).ready(function(){
+        $('#missingPersonForm').submit(function(event){
+            var name = $('#name').val();
+            var description = $('#description').val();
+            var location = $('#location').val();
+            var date_missing = $('#date_missing').val();
+            
+            if(name.length < 3){
+                alert('Name must be at least 3 characters long');
+                event.preventDefault();
+            }
+
+            if(description.length < 10){
+                alert('Description must be at least 10 characters long');
+                event.preventDefault();
+            }
+
+            // Additional validation logic can be added here
+
+        });
+    });
+</script>
+{% endblock %}
