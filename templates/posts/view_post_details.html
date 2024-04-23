@@ -18,10 +18,12 @@
         <!-- Buttons for reactions and comments -->
         <div class="mt-4 mb-4">
             <!-- Like button -->
-            <button class="btn btn-primary mb-3 mr-3">
-                <a href="{% url 'posts:react_to_post' post.id %}" class="text-white"><i class="fa fa-heart-o"></i></a>
-            </button>
-
+            <!-- <button class="btn btn-primary mb-3 mr-3 btn-link like-btn" id="react-btn" data-post-id="{{ post.id }}">
+                <a href="{% url 'posts:react_to_post' post.id %}" class="text-white"><i class="fa fa-heart-o"></i></a> -->
+                <!-- Like Count Display -->
+                <!-- <span class="like-count text-white" id="like-count">{{ post.liked_by.count }}</span>
+            </button> -->
+            
             <!-- Delete button (if user is the author) -->
             {% if post.user == request.user %}
                 <button class="btn btn-danger mb-3 mr-3">

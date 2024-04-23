@@ -20,7 +20,7 @@
             <div class="card h-100">
                 <img src="{{ data.post.photo.url }}" class="card-img-top" alt="{{ data.post.name }} Photo" style="object-fit: cover; height: 200px;">
                 <div class="card-body">
-                    <a href="#" class="mr-2 comment-btn" data-post-id="{{ data.post.id }}" data-toggle="modal" data-target="#commentModal"><i class="fa fa-comment"></i></a>
+                    <a href="#" class="btn btn-secondary mb-3 comment-btn ml-auto" data-post-id="{{ data.post.id }}" data-toggle="modal" data-target="#commentModal"><i class="fa fa-comment"></i></a>
 
                     <!-- Comments container -->
                     <div id="comments-{{ data.post.id }}" class="comments-container" style="display: none;">
@@ -45,7 +45,7 @@
                     <a href="#" class="toggle-comments-link" data-toggle="comments-{{ data.post.id }}">View all comments</a>
 
                     <!-- Display the like/react icon -->
-                    <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
+                    <span class="btn btn-link like-btn btn btn-primary mb-3 mr-3 text-white" id="react-btn" data-post-id="{{ data.post.id }}">
                         <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
                     </span>
                     <!-- Display the like count -->
@@ -54,6 +54,8 @@
                     <div class="reaction">
                         <!-- Update the like button to include an id attribute -->
                     </div>
+
+
                     <h5 class="card-title">{{ data.post.name }}</h5>
                     <p class="card-text">{{ data.post.description }}</p>
                     <p class="card-text"><small class="text-muted">Location: {{ data.post.location }}</small></p>

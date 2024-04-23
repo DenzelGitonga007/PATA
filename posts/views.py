@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 import threading
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -244,8 +244,7 @@ def reply_to_comment(request, comment_id):
 
 
 
-
-# Liking a post
+# Liking
 @login_required(login_url='accounts:login')
 def react_to_post(request, post_id):
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -264,5 +263,5 @@ def react_to_post(request, post_id):
         return JsonResponse({'likeCount': like_count})
     else:
         # Handle invalid request method or non-ajax request
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+        return HttpResponseBadRequest('Invalid request: AJAX request expected')
 
