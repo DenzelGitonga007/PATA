@@ -28,7 +28,13 @@
                     <p class="card-text">{{ data.post.description }}</p>
                     <p class="card-text"><small class="text-muted">Location: {{ data.post.location }}</small></p>
                     <p class="card-text"><small class="text-muted">Date Missing: {{ data.post.date_missing }}</small></p>
-                    <p class="card-text"><small class="text-muted">Posted by: <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></small></p>
+                    <p class="card-text"><small class="text-muted">Posted by: 
+                        {% if data.post.user.username == request.user.username %}
+                            <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">You</a></small>
+                        {% else %}
+                            <a href="{% url 'accounts:user_profile' username=data.post.user.username %}">{{ data.post.user.username }}</a></small>
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'posts:view_post_details' post_id=data.post.id %}" class="btn btn-primary float-right">View More Details</a>
@@ -63,6 +69,8 @@
     </div>
 </div>
 
+
+<!-- Commenting -->
 <script>
     $(document).ready(function () {
         // Attach click event handler to comment buttons
@@ -104,5 +112,6 @@
     });
 
 </script>
+<!-- End of commenting -->
 
 {% endblock %}
