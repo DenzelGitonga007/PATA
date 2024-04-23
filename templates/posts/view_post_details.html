@@ -17,37 +17,67 @@
         
         <!-- Buttons for reactions and comments -->
         <div class="mt-4 mb-4">
-            <button class="btn btn-primary mr-2"><a href="{% url 'posts:react_to_post' post.id %}" class="text-white">React</a></button>
+            <!-- Like button -->
+            <button class="btn btn-primary mb-3 mr-3">
+                <a href="{% url 'posts:react_to_post' post.id %}" class="text-white"><i class="fa fa-heart-o"></i></a>
+            </button>
+
+            <!-- Delete button (if user is the author) -->
             {% if post.user == request.user %}
-                <button class="btn btn-danger"><a href="{% url 'posts:delete_post' post.id %}" class="text-white">Delete</a></button>
+                <button class="btn btn-danger mb-3 mr-3">
+                    <a href="{% url 'posts:delete_post' post.id %}" class="text-white"><i class="fa fa-trash mr-2"></i></a>
+                </button>
             {% endif %}
+
+            <!-- Comment button -->
+            <button class="btn btn-secondary mb-3 comment-btn ml-auto" data-post-id="{{ post.id }}" data-toggle="modal" data-target="#commentModal">
+                <i class="fa fa-comment"></i>
+            </button>
         </div>
-    </div>
 
-    <!-- Comment button -->
-    <button class="btn btn-secondary mb-3 comment-btn" data-post-id="{{ post.id }}" data-toggle="modal" data-target="#commentModal">Comment</button>
 
-    <!-- Comment section -->
-    <div class="comment-section">
-        <h3 class="mb-3">Comments:</h3>
-        {% for comment in comments %}
-            <div class="comment">
-                <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
-                <p><em>Posted on: {{ comment.timestamp }}</em></p>
-                <!-- Button to reply to this comment -->
-                <button class="btn btn-info btn-sm"><a href="{% url 'posts:reply_to_comment' comment.id %}" class="text-white">Reply</a></button>
+        <!-- Comment section -->
+        <div class="comment-section">
+            <h4 class="mb-3">Comments:</h4>
+            <button class="btn btn-info mb-3" id="toggle-comments">
+                <i class="fa fa-comments"></i> Show Comments
+            </button> <!-- Button to toggle comments -->
+            <div id="comments-container" style="display: none;"> <!-- Container for comments -->
+                {% for comment in comments %}
+                    <div class="comment">
+                        <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                        <p><em>Posted on: {{ comment.timestamp }}</em></p>
+                        <!-- Button to reply to this comment -->
+                        <button class="btn btn-info btn-sm"><a href="{% url 'posts:reply_to_comment' comment.id %}" class="text-white">Reply</a></button>
+                    </div>
+                    <!-- Display replies to this comment -->
+                    {% for reply in comment.replies.all %}
+                        <div class="reply">
+                            <p><strong>{{ reply.user.username }} (Reply to {{ comment.user.username }}):</strong> {{ reply.text }}</p>
+                            <p><em>Replied on: {{ reply.timestamp }}</em></p>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
             </div>
-            <!-- Display replies to this comment -->
-            {% for reply in comment.replies.all %}
-                <div class="reply">
-                    <p><strong>{{ reply.user.username }} (Reply to {{ comment.user.username }}):</strong> {{ reply.text }}</p>
-                    <p><em>Replied on: {{ reply.timestamp }}</em></p>
-                </div>
-            {% endfor %}
-        {% endfor %}
+        </div>
     </div>
 </div>
 
 <!-- Comment modal -->
 {% include 'posts/comment_modal.html' %}
+
+<script>
+    // JavaScript to toggle visibility of comments
+    document.getElementById("toggle-comments").addEventListener("click", function() {
+        var commentsContainer = document.getElementById("comments-container");
+        if (commentsContainer.style.display === "none") {
+            commentsContainer.style.display = "block";
+            document.getElementById("toggle-comments").innerHTML = '<i class="fa fa-comments"></i> Hide Comments';
+        } else {
+            commentsContainer.style.display = "none";
+            document.getElementById("toggle-comments").innerHTML = '<i class="fa fa-comments"></i> Show Comments';
+        }
+    });
+</script>
+
 {% endblock %}
