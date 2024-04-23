@@ -1,56 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Conversation Detail</title>
-</head>
-<body>
-    <h1>Conversation Detail</h1>
-    <h2>Participants:</h2>
-    <ul>
-        {% for participant in conversation.participants.all %}
-            <li>{{ participant.username }}</li>
-        {% endfor %}
-    </ul>
-    <h2>Messages:</h2>
-    <!-- conversation_detail.html -->
+{% extends 'common/base.html' %}
+{% load static %}
 
-    {% for message in messages %}
-        <p>{{ message.sender.username }}: {{ message.text }}</p>
-    {% endfor %}
+{% block title %}
+    Conversation Detail | {{ block.super }}
+{% endblock %}
 
+{% block content %}
+<div class="container mt-5">
+    <!-- Conversation card -->
+    <div class="card">
+        <div class="card-header">
+            {% for participant in conversation.participants.all %}
+                {% if participant != request.user %}
+                    <h5 class="card-title text-center">{{ participant.username }}</h5>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for message in messages %}
+                    <div class="col-md-6 {% if message.sender == request.user %}offset-md-6 text-right{% endif %}">
+                        <div class="message {% if message.sender == request.user %}sender{% else %}recipient{% endif %}">
+                            <p>{{ message.text }}</p>
+                        </div>
+                        <br> <!-- separate the messages -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Message form -->
     <form id="message-form" method="post" action="">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Send</button>
+        <div class="form-group mt-4">
+            <input type="text" name="text" class="form-control" placeholder="Type your message...">
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
     </form>
+</div>
 
-    <script>
-        // Submit message form via AJAX
-        document.getElementById('message-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var formData = new FormData(this);
-            fetch(window.location.href, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // Reload the page to display new messages
-                    window.location.reload();
-                } else {
-                    // Handle form validation errors
-                    console.error(data.errors);
-                }
-            })
-            .catch(error => console.error(error));
-        });
-    </script>
+<script>
+    // Submit message form via AJAX
+    document.getElementById('message-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Reload the page to display new messages
+                window.location.reload();
+            } else {
+                // Handle form validation errors
+                console.error(data.errors);
+            }
+        })
+        .catch(error => console.error(error));
+    });
+</script>
 
+<style>
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+    }
 
-</body>
-</html>
+    .sender {
+        background-color: #007bff;
+        color: #fff;
+        border: 2px solid #007bff;
+        border-top-right-radius: 0;
+    }
+
+    .recipient {
+        background-color: #f0f0f0;
+        border: 2px solid #f0f0f0;
+        border-top-left-radius: 0;
+    }
+
+    .message p {
+        margin: 0;
+    }
+</style>
+
+{% endblock %}

@@ -22,3 +22,27 @@
     background-color: #298cf6; /* Change to desired hover color */
     color: aliceblue;
 }
+
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sender {
+    background-color: #007bff;
+    color: #fff;
+    border: 2px solid #007bff;
+    border-top-right-radius: 0;
+}
+
+.recipient {
+    background-color: #f0f0f0;
+    border: 2px solid #f0f0f0;
+    border-top-left-radius: 0;
+}
+
+.message p {
+    margin: 0;
+}
