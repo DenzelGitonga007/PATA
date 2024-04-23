@@ -14,6 +14,16 @@
                 <img src="{{ data.post.photo.url }}" class="card-img-top" alt="{{ data.post.name }} Photo" style="object-fit: cover; height: 200px;">
                 <div class="card-body">
                     <a href="#" class="mr-2 comment-btn" data-post-id="{{ data.post.id }}" data-toggle="modal" data-target="#commentModal"><i class="fa fa-comment"></i></a>
+
+                    <!-- Comments container -->
+                    <div id="comments-{{ data.post.id }}" class="comments-container" style="display: none;">
+                        {% for comment in data.comments %}
+                            <p>{{ comment.text }}</p>
+                            <!-- Render other comment details as needed -->
+                        {% endfor %}
+                    </div>
+                    <a href="#" class="toggle-comments-link" data-toggle="comments-{{ data.post.id }}">View all comments</a>
+
                     <!-- Display the like/react icon -->
                     <span class="btn btn-link like-btn" id="react-btn" data-post-id="{{ data.post.id }}">
                         <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
@@ -85,6 +95,13 @@
 
             // Show the modal
             $('#commentModal').modal('show');
+        });
+
+        // Toggle comments visibility when "View all comments" link is clicked
+        $('.toggle-comments-link').click(function (e) {
+            e.preventDefault();
+            var commentsId = $(this).data('toggle');
+            $('#' + commentsId).toggle();
         });
 
         // Handle form submission for commenting
