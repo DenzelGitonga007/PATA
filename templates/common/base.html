@@ -41,12 +41,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Custom JS -->
     <script>
-        // Pass CSRF token to JavaScript variable
+        // Pass CSRF token to JavaScript variable for the like
         const csrfToken = "{{ csrf_token }}";
+        // Define a global variable to store the comment URL
+        const commentUrl = "{% url 'posts:comment_on_post' 0 %}"; // for the comment
+</script>
+
     </script>
     {% block javascript %}
         <script src="{% static 'js/scripts.js' %}"></script>
         <script src="{% static 'js/liking.js' %}"></script>
+        <script src="{% static 'js/comments.js' %}"></script>
     {% endblock %}
 </body>
 </html>
