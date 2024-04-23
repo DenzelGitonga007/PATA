@@ -43,36 +43,4 @@
     </div>
 </div>
 
-<!-- Tooltip Script -->
-<script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
-
-<!-- Client-side Validation Script -->
-<script>
-    // Example of client-side validation using jQuery
-    $(document).ready(function(){
-        $('#missingPersonForm').submit(function(event){
-            var name = $('#name').val();
-            var description = $('#description').val();
-            var location = $('#location').val();
-            var date_missing = $('#date_missing').val();
-            
-            if(name.length < 3){
-                alert('Name must be at least 3 characters long');
-                event.preventDefault();
-            }
-
-            if(description.length < 10){
-                alert('Description must be at least 10 characters long');
-                event.preventDefault();
-            }
-
-            // Additional validation logic can be added here
-
-        });
-    });
-</script>
 {% endblock %}
