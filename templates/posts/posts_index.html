@@ -18,10 +18,11 @@
                     <!-- Comments container -->
                     <div id="comments-{{ data.post.id }}" class="comments-container" style="display: none;">
                         {% for comment in data.comments %}
-                            <p>{{ comment.text }}</p>
-                            <!-- Render other comment details as needed -->
+                            <p><em>{{ comment.user }} said - </em>{{ comment.text }}</p>
+                            <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">Reply</a>
                         {% endfor %}
                     </div>
+
                     <a href="#" class="toggle-comments-link" data-toggle="comments-{{ data.post.id }}">View all comments</a>
 
                     <!-- Display the like/react icon -->
@@ -79,6 +80,75 @@
         </div>
     </div>
 </div>
+
+<!-- Modal for replying to comments -->
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="replyModalLabel">Reply to Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reply-form" method="post" action="{% url 'posts:reply_to_comment' comment_id=0 %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="comment_id" class="comment-id" value="">
+                    <div class="form-group">
+                        <label for="reply-text">Your Reply:</label>
+                        <textarea class="form-control reply-text" name="text" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Reply</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+    // Attach click event handler to reply buttons
+    $('.reply-btn').click(function (e) {
+        e.preventDefault(); // Prevent default link behavior
+        
+        // Get the comment ID from the button data attribute
+        var commentId = $(this).data('comment-id');
+
+        // Set the comment ID in the hidden input field of the reply form
+        $('#reply-form').find('.comment-id').val(commentId);
+
+        // Show the modal for replying to comment
+        $('#replyModal').modal('show');
+    });
+
+    // Handle form submission for replying to a comment
+    $('#reply-form').submit(function (e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Serialize form data
+        var formData = $(this).serialize();
+
+        // Submit the form via AJAX
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            success: function (response) {
+                // Optionally, you can refresh the comments section to show the new reply
+                // Close the modal for replying to comment
+                $('#replyModal').modal('hide');
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
+</script>
 
 
 {% endblock %}

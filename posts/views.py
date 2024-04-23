@@ -181,25 +181,22 @@ def comment_on_post(request, post_id):
 # Reply to comment
 @login_required(login_url='accounts/login')
 def reply_to_comment(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
-    form = CommentReplyForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        reply = form.save(commit=False)
-        reply.user = request.user
-        reply.comment = comment  # Assign the parent comment
-        reply.save()
-        
-        # Notify the parent comment owner
-        messages.info(request, f'New reply to your comment by {request.user.username}')
-        
-        return redirect('posts:view_post_details', post_id=comment.post.id)
-    
-    context = {
-        'form': form,
-        'comment': comment
-    }
-    
-    return render(request, 'posts/reply_comment_form.html', context)
+    if request.method == 'POST':
+        comment_id = request.POST.get('comment_id')
+        comment = get_object_or_404(Comment, id=comment_id)
+        form = CommentReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.user = request.user
+            reply.comment = comment  # Assign the parent comment
+            reply.save()
+            messages.info(request, f'New reply to your comment by {request.user.username}')
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 
 
