@@ -4,6 +4,13 @@
 
 {% block content %}
 <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
     <h1 class="text-center mb-4">All Missing Person Posts</h1>
     <a href="{% url 'posts:create_missing_person' %}" class="btn btn-primary mb-3">Post</a>
 
@@ -18,9 +25,21 @@
                     <!-- Comments container -->
                     <div id="comments-{{ data.post.id }}" class="comments-container" style="display: none;">
                         {% for comment in data.comments %}
-                            <p><em>{{ comment.user }} said - </em>{{ comment.text }}</p>
-                            <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">Reply</a>
+                        <hr>
+                            <p>{{ comment.text }}</p>
+                            <!-- Add an element to toggle visibility of replies -->
+                            <span class="toggle-replies" data-comment-id="{{ comment.id }}">▼ Show Replies</span>
+                            <div class="replies-container" style="display: none;">
+                                <!-- Render replies here -->
+                                {% for reply in comment.replies.all %}
+                                    <p><strong>{{ reply.user.username }}</strong> replied: {{ reply.text }}</p>
+                                    <!-- Render other reply details as needed -->
+                                {% endfor %}
+                            </div>
+                        <hr>
                         {% endfor %}
+                    
+                    
                     </div>
 
                     <a href="#" class="toggle-comments-link" data-toggle="comments-{{ data.post.id }}">View all comments</a>
@@ -150,5 +169,20 @@
 
 </script>
 
+<script>
 
+$(document).ready(function () {
+    // Attach click event handler to toggle-replies elements
+    $('.toggle-replies').click(function () {
+        // Toggle the visibility of replies container associated with the clicked comment
+        $(this).siblings('.replies-container').toggle();
+        // Change the text of the toggle-replies element to reflect its current state
+        $(this).text(function (i, text) {
+            return text === '▼ Show Replies' ? '▲ Hide Replies' : '▼ Show Replies';
+        });
+    });
+});
+
+
+</script>
 {% endblock %}
