@@ -111,15 +111,14 @@ def view_post_details(request, post_id):
     View the particular post details
     """
     post = get_object_or_404(MissingPerson, pk=post_id)
-    comments = post.comment_set.all()  # Retrieve comments for the post
-    # reactions = post.reaction_set.all()  # Retrieve reactions for the post
-    
+    comments = post.comment_set.all().order_by('-timestamp')  # Retrieve comments for the post, ordered by timestamp descending
+
     context = {
         'post': post,
         'comments': comments,
-        
     }
     return render(request, 'posts/view_post_details.html', context)
+
 
 
 # Update
