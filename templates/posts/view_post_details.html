@@ -27,19 +27,25 @@
                 <!-- <span class="like-count text-white" id="like-count">{{ post.liked_by.count }}</span>
             </button> -->
             
-            <!-- Delete button (if user is the author) -->
-            {% if post.user == request.user %}
-                <button type="button" class="btn btn-danger mb-3 mr-3 delete-post-btn" data-toggle="modal" data-target="#confirmDeleteModal">
-                    <i class="fa fa-trash mr-2"></i>
-                </button>
-
-            {% endif %}
-
-
             <!-- Comment button -->
             <button class="btn btn-secondary mb-3 comment-btn ml-auto" data-post-id="{{ post.id }}" data-toggle="modal" data-target="#commentModal">
                 <i class="fa fa-comment"></i>
             </button>
+
+            <!-- Delete button (if user is the author) -->
+            {% if post.user == request.user %}
+                <button type="button" class="btn btn-danger mb-3 delete-post-btn" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <i class="fa fa-trash"></i>
+                </button>
+                <!-- Update the post -->
+                <a href="{% url 'posts:update_post' post.id %}" class="btn btn-primary mb-3">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
+
+            {% endif %}
+
+
+
         </div>
 
 
