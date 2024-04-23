@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Comment Notification</title>
+</head>
+<body>
+    <p>Hello {{ user }},</p>
+    <p>Your missing person post has received a new comment from {{ comment_user }}:</p>
+    <p><em>Comment:</em><br>{{ comment_text }}</p>
+    <p>View the post <a href="{{ post_url }}">here</a>.</p>
+    <p>Thank you.</p>
+</body>
+</html>

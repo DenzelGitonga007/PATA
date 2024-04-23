@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model # to reference the user model
 from django.core.validators import FileExtensionValidator, MaxValueValidator
+from django.urls import reverse
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -41,6 +42,13 @@ class MissingPerson(models.Model):
             self.liked_by.add(user)
             
         self.save()  # Save the instance to update the liked_by field in the database
+
+    def get_absolute_url(self):
+        return reverse('posts:view_post_details', kwargs={'post_id': self.pk})
+
+
+
+
 
 # Comments
 class Comment(models.Model):

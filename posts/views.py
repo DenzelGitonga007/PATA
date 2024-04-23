@@ -3,9 +3,12 @@ from .models import MissingPerson, Comment
 from .forms import CommentReplyForm, MissingPersonForm, CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from django.http import JsonResponse
+import threading
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 
@@ -167,6 +170,9 @@ def comment_on_post(request, post_id):
             # Notify the post owner
             messages.info(request, f'New comment on your post by {request.user.username}')
             
+            # Send email asynchronously
+            threading.Thread(target=send_email_async, args=(post, comment, request)).start()
+            
             # Return a JSON response indicating success
             return JsonResponse({'success': True})
         else:
@@ -176,6 +182,29 @@ def comment_on_post(request, post_id):
         # Return a JSON response with an error if the request method is not POST
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+def send_email_async(post, comment, request):
+    try:
+        # Prepare email content
+        subject = f'New comment on your post by {request.user.username}'
+        context = {
+            'user': post.user.username,
+            'comment_user': request.user.username,
+            'comment_text': comment.text,
+            'post_url': request.build_absolute_uri(post.get_absolute_url())
+        }
+        html_message = render_to_string('email/comment_notification.html', context)
+        plain_message = strip_tags(html_message)
+        
+        # Send email
+        send_mail(
+            subject,
+            plain_message,
+            settings.EMAIL_HOST_USER,
+            [post.user.email],
+            html_message=html_message,
+        )
+    except Exception as e:
+        print(f"Email sending failed: {str(e)}")
 
 
 # Reply to comment
