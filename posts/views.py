@@ -138,9 +138,13 @@ def update_post(request, post_id):
         else:
             messages.error(request, 'Failed to update the post')
     else:
-        form = MissingPersonForm(instance=post)
+        form = MissingPersonForm(instance=post)  # Pass instance of the post to populate the form
+        
     context = {'form': form}
     return render(request, 'posts/update_post.html', context)
+
+
+
 
 
 # Delete post
