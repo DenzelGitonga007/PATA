@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <p>Hello {{ user.username }},</p>
+    <p>Your missing person post "{{ missing_person.name }}" has been successfully submitted!</p>
+    <p>We hope you find them soon.</p>
+    <p>View the post <a href="{{ site_url }}{% url 'posts:view_post_details' post_id=missing_person.pk %}">here</a>.</p>
+    <p>Thank you.</p>
+</body>
+</html>

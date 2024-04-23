@@ -23,8 +23,7 @@ Delete - User who posted is able to delete the missing person
 
 """
 
-
-# Create
+# Create post
 @login_required(login_url='accounts:login')
 def create_missing_person(request):
     """Upload missing person's details"""
@@ -34,21 +33,33 @@ def create_missing_person(request):
             missing_person = form.save(commit=False)
             missing_person.user = request.user
             missing_person.save()
-            user_email = request.user.email # get the email of the logged in user who posted
+            user_email = request.user.email  # Get the email of the logged-in user who posted
+            
             # Send email upon successful posting
             try:
+                # Prepare email content
+                site_url = request.build_absolute_uri('/')  # Get the site URL dynamically
+                context = {
+                    'user': request.user,
+                    'missing_person': missing_person,
+                    'site_url': site_url,  # Pass the site URL to the template context
+                }
+                html_message = render_to_string('email/create_post_notification.html', context)
+                plain_message = strip_tags(html_message)
+
                 email_message = EmailMessage(
-                    "Post submitted successfully", #subject
-                    "The missing person's details are now live. We hope you find them soon", # message
-                    settings.EMAIL_HOST_USER, # sender's email
-                    [user_email], # recepient email
+                    subject="Post submitted successfully",  # Subject
+                    body = plain_message,
+                    # body=email_content,  # Email content
+                    from_email=settings.EMAIL_HOST_USER,  # Sender's email
+                    to=[user_email],  # Recipient email
                 )
                 email_message.send()
             except Exception as e:
-                raise Exception("Email sending failed {}".format(str(e)))
+                # Handle email sending failure
+                raise Exception("Email sending failed: {}".format(str(e)))
+            
             # End of email send
-
-
             messages.success(request, 'Your post is now live! We hope you find the person soon')
             return redirect('posts:posts_index')
         else:
@@ -57,6 +68,7 @@ def create_missing_person(request):
         form = MissingPersonForm()
     context = {'form': form}
     return render(request, 'posts/create_missing_person.html', context)
+
 
 
 
@@ -184,6 +196,8 @@ def comment_on_post(request, post_id):
     else:
         # Return a JSON response with an error if the request method is not POST
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
 
 def send_email_async(post, comment, request):
     try:
