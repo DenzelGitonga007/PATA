@@ -1,3 +1,4 @@
+/* Button pulse */
 .pulse {
     animation: pulse 1s infinite;
 }
@@ -12,4 +13,11 @@
     100% {
         transform: scale(1);
     }
+}
+
+
+
+/* Conversation bar hover */
+.conversation-item:hover {
+    background-color: #007bff; /* Change to desired hover color */
 }
