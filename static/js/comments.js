@@ -53,6 +53,51 @@ $(document).ready(function () {
 // End of comments and show comments
 
 
+// Reply to comment
+
+$(document).ready(function () {
+    // Attach click event handler to reply buttons
+    $('.reply-btn').click(function (e) {
+        e.preventDefault(); // Prevent default link behavior
+        
+        // Get the comment ID from the button data attribute
+        var commentId = $(this).data('comment-id');
+
+        // Set the comment ID in the hidden input field of the reply form
+        $('#reply-form').find('.comment-id').val(commentId);
+
+        // Show the modal for replying to comment
+        $('#replyModal').modal('show');
+    });
+
+    // Handle form submission for replying to a comment
+    $('#reply-form').submit(function (e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Serialize form data
+        var formData = $(this).serialize();
+
+        // Submit the form via AJAX
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            success: function (response) {
+                // Optionally, you can refresh the comments section to show the new reply
+                // Close the modal for replying to comment
+                $('#replyModal').modal('hide');
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
+
+// End of reply to comment
+
+
 // Show Replies
 
 $(document).ready(function () {

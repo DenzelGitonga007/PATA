@@ -29,6 +29,7 @@
                             <p>{{ comment.text }}</p>
                             <!-- Add an element to toggle visibility of replies -->
                             <span class="toggle-replies" data-comment-id="{{ comment.id }}">▼ Show Replies</span>
+                            <a href="#" class="ml-2 reply-btn" data-comment-id="{{ comment.id }}"><i class="fa fa-reply"></i> Reply</a>
                             <div class="replies-container" style="display: none;">
                                 <!-- Render replies here -->
                                 {% for reply in comment.replies.all %}
@@ -38,9 +39,8 @@
                             </div>
                         <hr>
                         {% endfor %}
-                    
-                    
                     </div>
+                    
 
                     <a href="#" class="toggle-comments-link" data-toggle="comments-{{ data.post.id }}">View all comments</a>
 
@@ -124,50 +124,6 @@
         </div>
     </div>
 </div>
-
-
-
-<script>
-    $(document).ready(function () {
-    // Attach click event handler to reply buttons
-    $('.reply-btn').click(function (e) {
-        e.preventDefault(); // Prevent default link behavior
-        
-        // Get the comment ID from the button data attribute
-        var commentId = $(this).data('comment-id');
-
-        // Set the comment ID in the hidden input field of the reply form
-        $('#reply-form').find('.comment-id').val(commentId);
-
-        // Show the modal for replying to comment
-        $('#replyModal').modal('show');
-    });
-
-    // Handle form submission for replying to a comment
-    $('#reply-form').submit(function (e) {
-        e.preventDefault(); // Prevent default form submission
-        
-        // Serialize form data
-        var formData = $(this).serialize();
-
-        // Submit the form via AJAX
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            success: function (response) {
-                // Optionally, you can refresh the comments section to show the new reply
-                // Close the modal for replying to comment
-                $('#replyModal').modal('hide');
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
-
-</script>
 
 
 {% endblock %}
