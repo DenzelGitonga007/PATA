@@ -7,7 +7,7 @@
 </head>
 <body>
     <p>Hello {{ user }},</p>
-    <p>Your missing person post has received a new comment from {{ comment_user }}:</p>
+    <p>Your missing person post has received a new comment from <a href="{{ comment_user_profile }}">{{ comment_user }}</a>:</p>
     <p><em>Comment:</em><br>{{ comment_text }}</p>
     <p>View the post <a href="{{ post_url }}">here</a>.</p>
     <p>Thank you.</p>
