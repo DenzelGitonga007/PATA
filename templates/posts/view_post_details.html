@@ -5,6 +5,14 @@
 
 {% block content %}
 <div class="container post-details">
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+    
     <h3 class="mb-4">{{ post.name }} Post Details</h3>
     
     <div class="post">
