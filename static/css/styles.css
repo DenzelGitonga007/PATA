@@ -19,5 +19,6 @@
 
 /* Conversation bar hover */
 .conversation-item:hover {
-    background-color: #007bff; /* Change to desired hover color */
+    background-color: #298cf6; /* Change to desired hover color */
+    color: aliceblue;
 }
