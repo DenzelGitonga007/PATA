@@ -71,6 +71,9 @@ def logout_user(request):
     return HttpResponse('Succesfull logout')
     # the template
 
+
+
+
 # the home page
 def home(request):
     """The landing page"""
