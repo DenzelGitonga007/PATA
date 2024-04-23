@@ -12,7 +12,10 @@
         <p>{{ post.description }}</p>
         <p>Location: {{ post.location }}</p>
         <p>Date Missing: {{ post.date_missing }}</p>
-        <p>Posted by: <a href="{% url 'accounts:user_profile' username=post.user.username %}">{{ post.user.username }}</a></p>
+        <p>Posted by: 
+            {% if post.user.username == request.user.username %}
+                <a href="{% url 'accounts:user_profile' username=post.user.username %}">You</a></p>
+            {% endif %}
         <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo" class="img-fluid">
         
         <!-- Buttons for reactions and comments -->
