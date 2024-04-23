@@ -51,3 +51,21 @@ $(document).ready(function () {
 
 
 // End of comments and show comments
+
+
+// Show Replies
+
+$(document).ready(function () {
+    // Attach click event handler to toggle-replies elements
+    $('.toggle-replies').click(function () {
+        // Toggle the visibility of replies container associated with the clicked comment
+        $(this).siblings('.replies-container').toggle();
+        // Change the text of the toggle-replies element to reflect its current state
+        $(this).text(function (i, text) {
+            return text === '▼ Show Replies' ? '▲ Hide Replies' : '▼ Show Replies';
+        });
+    });
+});
+
+
+// End of show replies
