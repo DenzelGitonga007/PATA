@@ -9,4 +9,6 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'), # logout user
     path('', views.home, name='home'), # the home page
     path('profile/<str:username>/', views.user_profile, name='user_profile'), # view users profile
+    path('faq/', views.faqs, name='faqs'), # faqs
+    path('user_profile_report/', views.user_profile_report, name='user_profile_report'),
 ]

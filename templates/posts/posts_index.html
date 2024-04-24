@@ -46,7 +46,7 @@
 
                     <!-- Display the like/react icon -->
                     <span class="btn btn-link like-btn btn btn-primary mb-3 mr-3 text-white" id="react-btn" data-post-id="{{ data.post.id }}">
-                        <i class="fa fa-heart-o"></i> <!-- Use Font Awesome heart icon -->
+                        <i class="fa fa-heart-o pulse"></i> <!-- Use Font Awesome heart icon -->
                     </span>
                     <!-- Display the like count -->
                     <span class="like-count" id="like-count">{{ data.post.liked_by.count }}</span>
@@ -58,7 +58,7 @@
 
                     <h5 class="card-title">{{ data.post.name }}</h5>
                     <p class="card-text">{{ data.post.description }}</p>
-                    <p class="card-text"><small class="text-muted">Location: {{ data.post.location }}</small></p>
+                    <p class="card-text"><small class="text-muted">Last Seen At: {{ data.post.location }}</small></p>
                     <p class="card-text"><small class="text-muted">Date Missing: {{ data.post.date_missing }}</small></p>
                     <p class="card-text"><small class="text-muted">Posted by: 
                         {% if data.post.user.username == request.user.username %}

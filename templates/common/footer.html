@@ -1,28 +1,38 @@
-<footer class="footer bg-light">
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6">
-                <h5>Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li><a href="{% url 'posts:posts_index' %}">Home</a></li>
-                    {% if user.is_authenticated %}
-                    <li><a href="{% url 'accounts:user_profile' username=user.username %}">Profile</a></li>
-                    <li><a href="{% url 'chat:conversation_list' %}">Conversations</a></li>
-                    {% endif %}
-                </ul>
+<footer class="footer">
+    <div class="jumbotron jumbotron-fluid bg-light mb-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Quick Links</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><a href="{% url 'posts:posts_index' %}">Home</a></li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'accounts:user_profile' username=user.username %}">Profile</a></li>
+                                    <li><a href="{% url 'chat:conversation_list' %}">Conversations</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Contact</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>Email: denzelgitonga001@gmail.com</li>
+                                <li>Phone: +254 714 082 283</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h5>Contact</h5>
-                <ul class="list-unstyled">
-                    <li>Email: denzelgitonga001@gmail.com</li>
-                    <li>Phone: +254 714 082 283</li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <p>&copy; {% now 'Y' %} PATA. All rights reserved.</p>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>&copy; {% now 'Y' %} PATA. All rights reserved.</p>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,67 @@
+{% extends 'common/base.html' %}
+{% block title %}FAQs {{ block.super }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="container">
+        <h1>Frequently Asked Questions</h1>
+        <div class="accordion" id="accordionExample">
+            <!-- FAQ items -->
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Question 1: What is PATA?
+                        </button>
+                    </h2>
+                </div>
+    
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        PATA is a platform dedicated to helping find missing persons...
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ item 2 -->
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Question 2: How do I report a missing person?
+                        </button>
+                    </h2>
+                </div>
+    
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        To report a missing person, you can navigate to the "Report Missing Person" section...
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ item 3 -->
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Question 3: How do I find my missing person?
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body">
+                        To increase the chances of finding your missing person, you can post their details on PATA. Once the post is live, other users on the platform will see it and begin to react and comment. You can engage with them through comments and chat, which sensitizes more people about your missing person. This collective effort significantly enhances the likelihood of finding your missing loved one.
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Add more FAQ items here -->
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}

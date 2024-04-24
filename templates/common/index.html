@@ -4,16 +4,24 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8 offset-md-2 text-center">
-            <h1>Welcome to PATA</h1>
-            <p class="lead">PATA is a platform dedicated to helping find missing persons. Together, we can bring hope to those who are lost and reunite them with their loved ones.</p>
-            <p class="lead">Join our community today and contribute to making a difference.</p>
-            {% if user.is_authenticated %}
-                <a class="btn btn-primary btn-lg" href="{% url 'posts:create_missing_person' %}" role="button">Post a Missing Person</a>
-            {% else %}
-                <a class="btn btn-primary btn-lg pulse" href="{% url 'accounts:register' %}" role="button">Join Us</a>
-            {% endif %}
+        <div class="col-md-8 offset-md-2">
+            <div class="jumbotron">
+                <h1 class="display-4 text-center">Welcome to PATA</h1>
+                <p class="lead text-center">PATA is a platform dedicated to helping find missing persons. Together, we can bring hope to those who are lost and reunite them with their loved ones.</p>
+                <hr class="my-4">
+                <p class="lead text-center">Join our community today and contribute to making a difference.</p>
+                {% if user.is_authenticated %}
+                    <div class="text-center">
+                        <a class="btn btn-primary btn-lg pulse" href="{% url 'posts:create_missing_person' %}" role="button">Post a Missing Person</a>
+                    </div>
+                {% else %}
+                    <div class="text-center">
+                        <a class="btn btn-primary btn-lg pulse" href="{% url 'accounts:register' %}" role="button">Join Us</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

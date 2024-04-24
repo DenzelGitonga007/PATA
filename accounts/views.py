@@ -9,6 +9,15 @@ from django.core.mail import EmailMessage # send_mail # to send the mail after s
 from django.conf import settings
 from .forms import CustomerUserCreationForm, CustomUserAuthenticationForm
 from .models import CustomUser, UserProfile
+# from django.contrib.auth.models import User
+from django.http import HttpResponse
+import csv
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+import io
+
+
 
 # User creation
 def user_creation_view(request):
@@ -125,3 +134,90 @@ def user_profile(request, username):
         'following_count': following_count,
     }
     return render(request, 'accounts/profile.html', context)
+
+
+
+# User profile report
+@login_required(login_url='accounts:login')
+def user_profile_report(request):
+    # Get the currently logged-in user
+    current_user = request.user
+
+    # Count the number of posts associated with the logged-in user
+    num_posts = MissingPerson.objects.filter(user=current_user).count()
+
+    # Get the user's following and followers count
+    user_profile = UserProfile.objects.get(user=current_user)
+    num_following = user_profile.following.count()
+    num_followers = user_profile.followers.count()
+
+    # Prepare email content
+    email_subject = 'Your Profile Report'
+    email_body = (
+        f"User Profile Report\n\n"
+        f"Name: {current_user.username}\n"
+        f"Posts: {num_posts}\n"
+        f"Following: {num_following}\n"
+        f"Followers: {num_followers}\n"
+    )
+
+    # Create and send the email
+    email = EmailMessage(email_subject, email_body, to=[current_user.email])
+
+    # Prepare CSV data
+    csv_data = [
+        ['Name', 'Posts', 'Following', 'Followers'],
+        [current_user.username, num_posts, num_following, num_followers]
+    ]
+
+    # Create CSV file in memory
+    csv_buffer = io.StringIO()
+    writer = csv.writer(csv_buffer)
+    writer.writerows(csv_data)
+
+    # Attach the CSV file to the email
+    email.attach('user_profile_report.csv', csv_buffer.getvalue(), 'text/csv')
+
+    # Send the email
+    email.send()
+
+    # Return the CSV file as a downloadable response
+    response = HttpResponse(csv_buffer.getvalue(), content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="user_profile_report.csv"'
+    return response
+
+
+# FAQs
+# @login_required(login_url='accounts/login')
+def faqs(request):
+    # Your logic to retrieve FAQ data from the database or any other source goes here
+    # For now, let's assume you're passing an empty context
+    context = {}
+    return render(request, 'common/faqs.html', context)
+
+
+
+
+
+
+# # User reports for admin if ever needed, but change the namings
+# @login_required(login_url='accounts:login')
+# def user_profile_report(request):
+#     # Query all users and relevant information
+#     users = CustomUser.objects.all()
+
+#     # Prepare data for CSV export
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="user_profile_report.csv"'
+
+#     # Create CSV writer
+#     writer = csv.writer(response)
+#     writer.writerow(['Username', 'Email', 'Date Joined', 'Number of Posts'])
+
+#     # Write user data to CSV
+#     for user in users:
+#         # Count the number of posts associated with each user
+#         num_posts = MissingPerson.objects.filter(user=user).count()
+#         writer.writerow([user.username, user.email, user.date_joined, num_posts])
+
+#     return response
