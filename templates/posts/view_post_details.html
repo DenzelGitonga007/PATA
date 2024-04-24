@@ -23,6 +23,8 @@
         <p>Posted by: 
             {% if post.user.username == request.user.username %}
                 <a href="{% url 'accounts:user_profile' username=post.user.username %}">You</a></p>
+            {% else %}
+                <a href="{% url 'accounts:user_profile' username=post.user.username %}">{{ post.user.username }}</a></small>
             {% endif %}
         <img src="{{ post.photo.url }}" alt="{{ post.name }} Photo" class="img-fluid">
         
