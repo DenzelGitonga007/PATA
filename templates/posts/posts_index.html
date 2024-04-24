@@ -26,7 +26,7 @@
                     <div id="comments-{{ data.post.id }}" class="comments-container" style="display: none;">
                         {% for comment in data.comments %}
                         <hr>
-                            <p>{{ comment.text }}</p>
+                            <p><strong>{{ comment.user.username }}: </strong>{{ comment.text }}</p>
                             <!-- Add an element to toggle visibility of replies -->
                             <span class="toggle-replies" data-comment-id="{{ comment.id }}">▼ Show Replies</span>
                             <a href="#" class="ml-2 reply-btn" data-comment-id="{{ comment.id }}"><i class="fa fa-reply"></i> Reply</a>
